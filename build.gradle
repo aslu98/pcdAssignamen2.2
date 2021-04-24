@@ -25,9 +25,14 @@ dependencies {
     implementation 'com.google.guava:guava:28.2-jre'
 
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.22'
+    implementation group: 'io.vertx', name: 'vertx-ext', version: '14', ext: 'pom'
     implementation files('JPF/jpf-core/build/jpf.jar')
 
-    //compile "org.bouncycastle:bcprov-jdk15:1.44"
+    compile 'io.vertx:vertx-core:4.0.3'
+    compile 'io.vertx:vertx-web:4.0.3'
+    compile 'io.vertx:vertx-web-client:4.0.3'
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.61.Final'
+    runtimeOnly group: 'io.netty', name: 'netty-resolver-dns-native-macos', version: '4.1.61.Final'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
