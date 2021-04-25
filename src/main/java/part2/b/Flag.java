@@ -1,4 +1,4 @@
-package part2.b.view;
+package part2.b;
 
 public class Flag {
 

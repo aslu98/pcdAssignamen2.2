@@ -1,6 +1,6 @@
 package part2.b.view;
 
-import part2.a.model.train.TrainState;
+import part2.b.InputListener;
 
 /**
  * Class representing the view part of the application.
@@ -25,9 +25,17 @@ public class View {
         	frame.setVisible(true);
         });
     }
+
+    public void errorOccurred(String err){
+		frame.errorOccurred(err);
+	}
+
+    public void updateSolutions(String state){
+		frame.updateSolutions(state);
+	}
 	
-	public void update(TrainState state) {
-		frame.update(state);
+	public void updateMonitoring(String state) {
+		frame.updateMonitoring(state);
 	}
 	
 	public void done() {

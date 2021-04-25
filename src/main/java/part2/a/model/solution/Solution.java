@@ -17,12 +17,12 @@ public class Solution {
     private final Integer changesno;
     private final Boolean saleable;
     private final SolutionsWrapper wrapper;
+    private final List<String> trainid;
 
-    private Optional<String> trainid;
     private Optional<String> trainacronym;
     private Optional<List<String>> stopStations;
 
-    public Solution(final String id, final String origin, final String destination, final String direction, final Long departureTime, final Long arrivalTime,
+    public Solution(final List<String> trainid, final String id, final String origin, final String destination, final String direction, final Long departureTime, final Long arrivalTime,
                     final Double minprice, final String duration, final Integer changesno, final Boolean saleable, final SolutionsWrapper wrapper){
         this.id = id;
         this.origin = origin;
@@ -34,14 +34,13 @@ public class Solution {
         this.duration = duration;
         this.changesno = changesno;
         this.saleable = saleable;
-        this.trainid = Optional.empty();
+        this.trainid = trainid;
         this.trainacronym = Optional.empty();
         this.stopStations = Optional.empty();
         this.wrapper = wrapper;
     }
 
-    public void addDetails(final String trainid, final String trainacronym, final List<String> stopStations){
-        this.trainid = Optional.of(trainid);
+    public void addDetails(final String trainacronym, final List<String> stopStations){
         this.trainacronym = Optional.of(trainacronym);
         this.stopStations = Optional.of(stopStations);
         this.wrapper.updateReady();
@@ -58,8 +57,6 @@ public class Solution {
     public String getDestination() {
         return destination;
     }
-
-    public Optional<String> getTrainid() { return trainid; }
 
     public Optional<String> getTrainacronym() {
         return trainacronym;
@@ -97,26 +94,25 @@ public class Solution {
         return saleable;
     }
 
-    public String getNumTreno(){
-        return (this.trainid.isPresent()? this.trainid.get().substring(this.trainid.get().lastIndexOf(" ") + 1) : "");
-    }
-
     public Boolean detailsReady(){
-        return stopStations.isPresent() && trainid.isPresent() && trainacronym.isPresent();
+        return stopStations.isPresent() && trainacronym.isPresent();
     }
 
     @Override
     public String toString() {
         if (this.detailsReady()){
-            String str = trainid.get()
-                    + "\n\t" + origin + " -> " + destination + "\t(direction " + direction + ")"
-                    + "\n\tdeparture: " + TimeUtils.getStringTime(departureTime) + "\tarrival: " +TimeUtils.getStringTime(arrivalTime) + "\t(duration " + duration + ")"
-                    + "\n\tminprice: " + minprice + "\t\tchanges: " + changesno + "\t\tcan be acquired: " + (saleable ? "yes" : "no")
-                    + "\n\tstops: ";
-                for (int i = 0; i < stopStations.get().size(); i++){
-                    String stop = stopStations.get().get(i);
-                    str += stop + ((i+1) % 5 == 0 && i != stopStations.get().size()-1 ? "\n\t\t\t" : "\t ");
-                }
+            String str = "";
+            for (String id: trainid) {
+                str+= id + (trainid.indexOf(id) == trainid.size()-1 ? "" : "  +  ");
+            }
+            str += "\n   " + origin + " -> " + destination + "   (direction " + direction + ")"
+                + "\n   departure: " + TimeUtils.getStringTime(departureTime) + "   arrival: " +TimeUtils.getStringTime(arrivalTime) + "   (duration " + duration + ")"
+                + "\n   minprice: " + minprice + "      changes: " + changesno + "      can be acquired: " + (saleable ? "yes" : "no")
+                + "\n   stops: ";
+            for (int i = 0; i < stopStations.get().size(); i++){
+                String stop = stopStations.get().get(i);
+                str += stop + ((i+1) % 5 == 0 && i != stopStations.get().size()-1 ? "\n              " : "      ");
+            }
             return str + "\n";
         }
         else {

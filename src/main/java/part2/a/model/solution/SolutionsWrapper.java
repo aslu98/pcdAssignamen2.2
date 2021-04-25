@@ -18,9 +18,9 @@ public class SolutionsWrapper {
 
     @Override
     public String toString() {
-        String str = "\n";
+        String str = "";
         for (Solution sol: solutions){
-            str +=  "\n" + sol.toString();
+            str +=  sol.toString() + "\n";
         }
         return str;
     }

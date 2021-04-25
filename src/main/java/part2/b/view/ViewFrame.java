@@ -1,6 +1,8 @@
 package part2.b.view;
 
 import part2.a.model.train.TrainState;
+import part2.b.InputListener;
+import part2.b.RealTimeSubject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,15 +20,18 @@ import java.util.ArrayList;
  */
 public class ViewFrame extends JFrame implements ActionListener {
 
-	private JButton startButton;
+	private JButton findButton;
 	private JButton stopButton;
 	private JButton chooseDir;
 	private JButton chooseFile;
-	private JTextField nMostFreqWords;
+	private JTextField fromField;
+	private JTextField toField;
+	private JTextField dateField;
+	private JTextField timeField;
 	private JTextField state;
 	private JLabel selectedDir;
 	private JLabel selectedFile;
-	private JTextArea wordsFreq;
+	private JTextArea solutions;
 	private JFileChooser startDirectoryChooser;
 	private JFileChooser wordsToDiscardFileChooser;
 	
@@ -36,11 +41,11 @@ public class ViewFrame extends JFrame implements ActionListener {
 	private ArrayList<InputListener> listeners;
 
 	public ViewFrame(){
-		super(".:: Words Freq ::.");
-		setSize(600,400);
+		super(".:: Trains ::.");
+		setSize(800,600);
 		listeners = new ArrayList<InputListener>();
 		
-		startButton = new JButton("start");
+		findButton = new JButton("find");
 		stopButton = new JButton("stop");
 		chooseDir = new JButton("select dir");
 		chooseFile = new JButton("select file");
@@ -50,21 +55,27 @@ public class ViewFrame extends JFrame implements ActionListener {
 		selectedFile = new JLabel("test/ass01/data-ita/config.txt");
 		selectedFile.setSize(200,14);
 
-		nMostFreqWords = new JTextField("10");
-		
+		fromField = new JTextField("  Ancona  ");
+		toField = new JTextField("  Bologna Centrale  ");
+		dateField = new JTextField("  25/04/2021  ");
+		timeField = new JTextField("  11.30  ");
+
 		JPanel controlPanel1 = new JPanel();
-		controlPanel1.add(chooseDir);
-		controlPanel1.add(selectedDir);
+		controlPanel1.add(new JLabel("From: "));
+		controlPanel1.add(fromField);
 		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
-		controlPanel1.add(chooseFile);
-		controlPanel1.add(selectedFile);
+		controlPanel1.add(new JLabel("To: "));
+		controlPanel1.add(toField);
+		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
+		controlPanel1.add(new JLabel("Date: "));
+		controlPanel1.add(dateField);
+		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
+		controlPanel1.add(new JLabel("Time: "));
+		controlPanel1.add(timeField);
+		controlPanel1.add(Box.createRigidArea(new Dimension(40,0)));
+		controlPanel1.add(findButton);
 		
 		JPanel controlPanel2 = new JPanel();
-		controlPanel2.add(new JLabel("Num words"));
-		controlPanel2.add(nMostFreqWords);
-		controlPanel2.add(Box.createRigidArea(new Dimension(40,0)));
-		controlPanel2.add(startButton);
-		controlPanel2.add(stopButton);
 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
@@ -72,8 +83,8 @@ public class ViewFrame extends JFrame implements ActionListener {
 		controlPanel.add(controlPanel2);
 		
 		JPanel wordsPanel = new JPanel();
-		wordsFreq = new JTextArea(15,40);
-		wordsPanel.add(wordsFreq);
+		solutions = new JTextArea(15,40);
+		wordsPanel.add(solutions);
 		JScrollPane scrollPane=new JScrollPane(wordsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		JPanel infoPanel = new JPanel();
@@ -89,15 +100,13 @@ public class ViewFrame extends JFrame implements ActionListener {
 		cp.add(BorderLayout.SOUTH, infoPanel);
 		setContentPane(cp);		
 		
-		startButton.addActionListener(this);
+		findButton.addActionListener(this);
 		stopButton.addActionListener(this);
 		chooseDir.addActionListener(this);
 		chooseFile.addActionListener(this);
 		
-		this.startButton.setEnabled(true);
+		this.findButton.setEnabled(true);
 		this.stopButton.setEnabled(false);
-		chooseDir.setEnabled(true);
-		chooseFile.setEnabled(true);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -123,23 +132,20 @@ public class ViewFrame extends JFrame implements ActionListener {
 		    	wordsToDiscardFile = wordsToDiscardFileChooser.getSelectedFile();
 		        selectedFile.setText(wordsToDiscardFile.getAbsolutePath());
 		     }		    
-		} else if (src == startButton) {
-			File dir = new File(selectedDir.getText());
-			File configFile = new File(selectedFile.getText());
-			int numMostFreqWords = Integer.parseInt(nMostFreqWords.getText());			
-			//this.notifyStarted(dir, configFile, numMostFreqWords);
-			this.state.setText("Processing...");
-			
-			this.startButton.setEnabled(false);
-			this.stopButton.setEnabled(true);
-			chooseDir.setEnabled(false);
-			chooseFile.setEnabled(false);
+		} else if (src == findButton) {
+			String from = fromField.getText().trim();
+			String to = toField.getText().trim();
+			String date = dateField.getText().trim();
+			String time = timeField.getText().trim();
+			this.state.setText("Finding...");
+			this.notifyFindSolutions(from, to, date, time);
+			this.findButton.setEnabled(false);
 			
 		} else if (src == stopButton) {
 			//this.notifyStopped();
 			this.state.setText("Stopped.");
 
-			this.startButton.setEnabled(true);
+			this.findButton.setEnabled(true);
 			this.stopButton.setEnabled(false);
 			chooseDir.setEnabled(true);
 			chooseFile.setEnabled(true);
@@ -153,9 +159,15 @@ public class ViewFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	private void notifyStartMonitoring(String numTreno){
+	private void notifyStartMonitoringTrain(String code){
 		for (InputListener l: listeners){
-			l.startMonitoring(numTreno);
+			l.startMonitoring(code, RealTimeSubject.TRAIN);
+		}
+	}
+
+	private void notifyStartMonitoringStation(String code){
+		for (InputListener l: listeners){
+			l.startMonitoring(code, RealTimeSubject.STATION);
 		}
 	}
 
@@ -164,16 +176,29 @@ public class ViewFrame extends JFrame implements ActionListener {
 			l.stopMonitoring();
 		}
 	}
+
+	public void errorOccurred(String err){
+		this.state.setText(err);
+		this.findButton.setEnabled(true);
+	}
 	
-	public void update(TrainState state) {
+	public void updateSolutions(String state) {
 		SwingUtilities.invokeLater(() -> {
-			//update monitoraggio
+			this.solutions.setText(state);
+			this.state.setText("Ready.");
+			this.findButton.setEnabled(true);
+		});
+	}
+
+	public void updateMonitoring(String state) {
+		SwingUtilities.invokeLater(() -> {
+			//update mon
 		});
 	}
 	
 	public void done() {
 		SwingUtilities.invokeLater(() -> {
-			this.startButton.setEnabled(true);
+			this.findButton.setEnabled(true);
 			this.stopButton.setEnabled(false);
 			chooseDir.setEnabled(true);
 			chooseFile.setEnabled(true);

@@ -49,8 +49,8 @@ public class RealTimeStationAPIAgent extends RealTimeAPIAgent {
                     }
                     this.addDepartureInfo();
                 })
-                .onFailure(err ->
-                        log("Something went wrong " + err.getMessage()));
+                .onFailure(err -> log("Something went wrong " + err.getMessage()
+                        + "\n URI was " + uriArrivi));
 
     }
 
@@ -73,7 +73,8 @@ public class RealTimeStationAPIAgent extends RealTimeAPIAgent {
                     StationState station = new StationState(trains, super.getCode());
                     super.getPromise().complete(station);
                 })
-                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                                    + "\n URI was " + uriPartenze));
     }
 
     private String getURI(String direction){

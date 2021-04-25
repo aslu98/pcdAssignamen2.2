@@ -1,96 +1,102 @@
 part1/ViewerTask.java
  part1.ViewerTask
-part1/MasterTask.java
- part1.MasterTask
-part1/Controller.java
- part1.Controller
-part2/a/agency/TrainSolutionsAPIAgent.java
- part2.a.agency.TrainSolutionsAPIAgent
-part2/b/view/BasicAgent.java
- part2.b.view.BasicAgent
+part1/Main.java
+ part1.Main
 part1/Flag.java
  part1.Flag
-part1/DocLoaderTask.java
- part1.DocLoaderTask
-part2/a/model/TimeUtils.java
- part2.a.model.TimeUtils
-part2/b/view/Flag.java
- part2.b.view.Flag
+part2/b/Monitorer.java
+ part2.b.Monitorer
+part2/b/InputListener.java
+ part2.b.InputListener
 part1/jpf/FileMockImpl.java
  part1.jpf.FileMockImpl
-part1/InputListener.java
- part1.InputListener
-part1/TextAnalyzerTask.java
- part1.TextAnalyzerTask
-part2/b/view/Viewer.java
- part2.b.view.Viewer
-part2/a/APIMain.java
- part2.a.APIMain
+part2/a/model/station/DepTrainInStation.java
+ part2.a.model.station.DepTrainInStation
 part2/a/agency/BasicAPIAgent.java
  part2.a.agency.BasicAPIAgent
-part2/a/agency/RealTimeTrainAPIAgent.java
- part2.a.agency.RealTimeTrainAPIAgent
-part2/a/model/solution/Solution.java
- part2.a.model.solution.Solution
-part1/WordFreqMap.java
- part1.WordFreqMap
+part2/a/model/station/ArrTrainInStation.java
+ part2.a.model.station.ArrTrainInStation
+part2/b/Flag.java
+ part2.b.Flag
 part1/jpf/BasicTask.java
  part1.jpf.BasicTask
-part2/a/model/train/TimeInfo.java
- part2.a.model.train.TimeInfo
-part1/BasicTask.java
- part1.BasicTask
 part2/b/view/ViewFrame.java
  part2.b.view.ViewFrame
 part1/DocDiscovererTask.java
  part1.DocDiscovererTask
 part1/jpf/jpfMain.java
  part1.jpf.jpfMain
-part1/jpf/TextAnalyzerTask.java
- part1.jpf.TextAnalyzerTask
-part1/jpf/ModelCheckingData.java
- part1.jpf.ModelCheckingData
-part1/jpf/Master.java
- part1.jpf.Master
 part1/DefaultInputs.java
  part1.DefaultInputs
-part2/a/model/train/Stop.java
- part2.a.model.train.Stop
-part1/jpf/WordFreqMap.java
- part1.jpf.WordFreqMap
-part1/View.java
- part1.View
 part2/b/view/View.java
  part2.b.view.View
-part1/jpf/DocDiscovererTask.java
- part1.jpf.DocDiscovererTask
-part1/jpf/DocLoaderTask.java
- part1.jpf.DocLoaderTask
-part2/a/agency/RealTimeAPIAgent.java
- part2.a.agency.RealTimeAPIAgent
 part1/ViewFrame.java
  part1.ViewFrame
-part1/Main.java
- part1.Main
-part2/a/model/solution/SolutionsWrapper.java
- part2.a.model.solution.SolutionsWrapper
-part2/b/view/InputListener.java
- part2.b.view.InputListener
+part1/Controller.java
+ part1.Controller
 part2/a/model/train/TrainState.java
  part2.a.model.train.TrainState
 part1/jpf/File.java
  part1.jpf.File
 part1/jpf/DirMockImpl.java
  part1.jpf.DirMockImpl
+part2/a/agency/RealTimeTrainAPIAgent.java
+ part2.a.agency.RealTimeTrainAPIAgent
+part1/jpf/TextAnalyzerTask.java
+ part1.jpf.TextAnalyzerTask
+part2/b/Controller.java
+ part2.b.Controller
+part1/MasterTask.java
+ part1.MasterTask
 part2/a/model/station/StationState.java
  part2.a.model.station.StationState
+part1/DocLoaderTask.java
+ part1.DocLoaderTask
+part2/a/model/TimeUtils.java
+ part2.a.model.TimeUtils
+part1/InputListener.java
+ part1.InputListener
+part1/TextAnalyzerTask.java
+ part1.TextAnalyzerTask
+part2/a/APIMain.java
+ part2.a.APIMain
 part2/a/model/station/TrainInStation.java
  part2.a.model.station.TrainInStation
-part2/a/TrainAPI.java
- part2.a.TrainAPI
-part2/a/model/station/ArrTrainInStation.java
- part2.a.model.station.ArrTrainInStation
-part2/a/model/station/DepTrainInStation.java
- part2.a.model.station.DepTrainInStation
+part2/b/Main.java
+ part2.b.Main
+part1/WordFreqMap.java
+ part1.WordFreqMap
+part2/a/model/train/TimeInfo.java
+ part2.a.model.train.TimeInfo
+part1/BasicTask.java
+ part1.BasicTask
+part2/b/RealTimeSubject.java
+ part2.b.RealTimeSubject
 part2/a/agency/RealTimeStationAPIAgent.java
  part2.a.agency.RealTimeStationAPIAgent
+part1/jpf/Master.java
+ part1.jpf.Master
+part2/a/model/train/Stop.java
+ part2.a.model.train.Stop
+part1/jpf/WordFreqMap.java
+ part1.jpf.WordFreqMap
+part1/View.java
+ part1.View
+part1/jpf/DocDiscovererTask.java
+ part1.jpf.DocDiscovererTask
+part1/jpf/DocLoaderTask.java
+ part1.jpf.DocLoaderTask
+part2/a/agency/RealTimeAPIAgent.java
+ part2.a.agency.RealTimeAPIAgent
+part1/jpf/ModelCheckingData.java
+ part1.jpf.ModelCheckingData
+part2/b/BasicAgent.java
+ part2.b.BasicAgent
+part2/a/agency/TrainSolutionsAPIAgent.java
+ part2.a.agency.TrainSolutionsAPIAgent
+part2/a/TrainAPI.java
+ part2.a.TrainAPI
+part2/a/model/solution/SolutionsWrapper.java
+ part2.a.model.solution.SolutionsWrapper
+part2/a/model/solution/Solution.java
+ part2.a.model.solution.Solution

@@ -31,7 +31,8 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                     this.setStationCode(response.bodyAsString());
                     this.getRealTimeData();
                 })
-                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                        + "\n URI was " + this.departureStationURI()));
     }
 
     private void getRealTimeData(){
@@ -58,7 +59,8 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                     train.addStops(stops);
                     super.getPromise().complete(train);
                 })
-                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                        + "\n URI was " + this.realTimeURI()));
     }
 
     private String departureStationURI(){

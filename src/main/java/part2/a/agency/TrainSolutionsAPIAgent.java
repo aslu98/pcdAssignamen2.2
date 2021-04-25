@@ -10,12 +10,13 @@ import part2.a.model.solution.SolutionsWrapper;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class TrainSolutionsAPIAgent extends BasicAPIAgent {
 
     private final int NUM_SOLUTIONS = 5;
-    private final String from;
-    private final String to;
+    private String from;
+    private String to;
     private final String date;
     private final String time;
     private WebClientSession session;
@@ -34,7 +35,36 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
     public void start() {
         log("Service initializing...");
         this.session = WebClientSession.create(WebClient.create(vertx));
+        this.getDepartureName();
 
+    }
+
+    private void getDepartureName(){
+        session.get(super.getPort(), super.getHost(), this.getStationNameURI(this.from))
+                .ssl(true)
+                .as(BodyCodec.jsonArray())
+                .send()
+                .onSuccess(response -> {
+                    this.from = response.body().getJsonObject(0).getString("name");
+                    this.getArrivalName();
+                })
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                        + "\n URI was " + this.getStationNameURI(this.from)));
+    }
+
+    private void getArrivalName(){
+        session.get(super.getPort(), super.getHost(), this.getStationNameURI(this.to))
+                .ssl(true)
+                .as(BodyCodec.jsonArray())
+                .send()
+                .onSuccess(response -> {
+                    this.to = response.body().getJsonObject(0).getString("name");
+                    this.getSolutions();
+                })
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                        + "\n URI was " + this.getStationNameURI(this.to)));
+    }
+    private void getSolutions(){
         session.get(super.getPort(), super.getHost(), this.getSolutionsURI())
                 .ssl(true)
                 .as(BodyCodec.jsonArray())
@@ -47,8 +77,8 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
                         requestDetails(obj.getString("idsolution"), i);
                     }
                 })
-                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
-
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                        + "\n URI was " + this.getSolutionsURI()));
     }
 
     private void requestDetails(final String id, final int pos){
@@ -60,7 +90,8 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
                     JsonArray body = response.body();
                     addSolutionDetails(body.getJsonObject(0), pos);
                 })
-                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                        + "\n URI was " + this.getDetailsURI(id)));
     }
 
     public void SolutionsReady(){
@@ -78,18 +109,22 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
         String duration = jsonSolution.getString("duration");
         Integer changesno = jsonSolution.getInteger("changesno");
         Boolean saleable = jsonSolution.getBoolean("saleable");
-        return new Solution(id, origin, destination, direction, departureTime, arrivalTime, minprice, duration, changesno, saleable, solutionsWrap);
+        JsonArray ids = jsonSolution.getJsonArray("trainlist");
+        List<String> trainids = new LinkedList<>();
+        for (Object trainid: ids){
+            trainids.add(((JsonObject) trainid).getString("trainidentifier"));
+        }
+        return new Solution(trainids, id, origin, destination, direction, departureTime, arrivalTime, minprice, duration, changesno, saleable, solutionsWrap);
     }
 
     private void addSolutionDetails(final JsonObject jsonDetails, final int pos){
-        String trainid = jsonDetails.getString("trainidentifier");
         String trainacronym = jsonDetails.getString("trainacronym");
         JsonArray stoplist = jsonDetails.getJsonArray("stoplist");
         List<String> stopStations = new LinkedList<>();
         for (Object stop: stoplist){
             stopStations.add(((JsonObject) stop).getString("stationname"));
         }
-        solutionsWrap.getSolutions().get(pos).addDetails(trainid,trainacronym, stopStations);
+        solutionsWrap.getSolutions().get(pos).addDetails(trainacronym, stopStations);
     }
 
     private String getSolutionsURI(){
@@ -102,5 +137,9 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
 
     private String getDetailsURI(final String id){
         return "/msite/api/solutions/" + id + "/details";
+    }
+
+    private String getStationNameURI(final String initial){
+        return "/msite/api/geolocations/locations?name=" + initial.replace(" ", "%20").toUpperCase();
     }
 }
