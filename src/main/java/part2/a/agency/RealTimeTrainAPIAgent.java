@@ -5,8 +5,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientSession;
 import io.vertx.ext.web.codec.BodyCodec;
-import part2.a.model.Stop;
-import part2.a.model.TrainState;
+import part2.a.model.train.Stop;
+import part2.a.model.train.TrainState;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -31,8 +31,7 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                     this.setStationCode(response.bodyAsString());
                     this.getRealTimeData();
                 })
-                .onFailure(err ->
-                        log("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
     }
 
     private void getRealTimeData(){
@@ -59,8 +58,7 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                     train.addStops(stops);
                     super.getPromise().complete(train);
                 })
-                .onFailure(err ->
-                        log("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
     }
 
     private String departureStationURI(){

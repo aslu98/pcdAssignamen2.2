@@ -1,5 +1,7 @@
 package part2.b.view;
 
+import part2.a.model.train.TrainState;
+
 /**
  * Class representing the view part of the application.
  * 
@@ -24,8 +26,8 @@ public class View {
         });
     }
 	
-	public void update(Object[] freqs) {
-		frame.update(freqs);
+	public void update(TrainState state) {
+		frame.update(state);
 	}
 	
 	public void done() {

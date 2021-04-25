@@ -1,6 +1,6 @@
 package part2.b.view;
 
-public class Viewer {
+public class Viewer extends BasicAgent {
 
 	private View view;
 	private Flag done;
@@ -11,17 +11,17 @@ public class Viewer {
 		this.done = done;
 	}
 
-	public void run() {
+	public void start() {
 		while (!done.isSet()) {
 			try {
 				//view.update(map.getCurrentMostFreq());
-				//aggiorna view con nuove info
+				//aggiorna monitoraggio
 				Thread.sleep(10);
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		//aggiorna view un'ultima volta
+		//aggiorna monitoraggio
 		//view.update(map.getCurrentMostFreq());
 	}
 }

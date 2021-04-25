@@ -1,5 +1,7 @@
 package part2.b.view;
 
+import part2.a.model.train.TrainState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,9 +49,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 		selectedDir.setSize(200,14);
 		selectedFile = new JLabel("test/ass01/data-ita/config.txt");
 		selectedFile.setSize(200,14);
-		
-		// startDirectory = new JFileChooser();
-		// wordsToDiscardFile = new JFileChooser();
+
 		nMostFreqWords = new JTextField("10");
 		
 		JPanel controlPanel1 = new JPanel();
@@ -127,7 +127,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 			File dir = new File(selectedDir.getText());
 			File configFile = new File(selectedFile.getText());
 			int numMostFreqWords = Integer.parseInt(nMostFreqWords.getText());			
-			this.notifyStarted(dir, configFile, numMostFreqWords);
+			//this.notifyStarted(dir, configFile, numMostFreqWords);
 			this.state.setText("Processing...");
 			
 			this.startButton.setEnabled(false);
@@ -136,7 +136,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 			chooseFile.setEnabled(false);
 			
 		} else if (src == stopButton) {
-			this.notifyStopped();
+			//this.notifyStopped();
 			this.state.setText("Stopped.");
 
 			this.startButton.setEnabled(true);
@@ -147,24 +147,27 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 	}
 
-	private void notifyStarted(File dir, File wordsFile, int nMostFreqWords){
+	private void notifyFindSolutions(String from, String to, String date, String time){
 		for (InputListener l: listeners){
-			l.started(dir, wordsFile, nMostFreqWords);
+			l.findSolutions(from, to, date, time);
 		}
 	}
 	
-	private void notifyStopped(){
+	private void notifyStartMonitoring(String numTreno){
 		for (InputListener l: listeners){
-			l.stopped();
+			l.startMonitoring(numTreno);
+		}
+	}
+
+	private void notifyStopMonitoring(){
+		for (InputListener l: listeners){
+			l.stopMonitoring();
 		}
 	}
 	
-	public void update(Object[] freqs) {
+	public void update(TrainState state) {
 		SwingUtilities.invokeLater(() -> {
-			wordsFreq.setText("");
-			for (int i = freqs.length - 1; i >= 0; i--) {
-				wordsFreq.append(freqs[i].toString() + "\n");
-			}
+			//update monitoraggio
 		});
 	}
 	

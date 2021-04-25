@@ -1,10 +1,10 @@
 package part2.b.view;
 
-import java.io.File;
-
 public interface InputListener {
 
-	void findSolutions(File dir, File wordsFile, int nMostFreqWords);
-	
-	void stopped();
+	void findSolutions(String from, String to, String date, String time);
+
+	void startMonitoring(String numTreno);
+
+	void stopMonitoring();
 }

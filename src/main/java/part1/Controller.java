@@ -13,7 +13,7 @@ public class Controller implements InputListener {
 
 	private Flag stopFlag;
 	private View view;
-	private final ForkJoinPool forkJoinPool;
+	private ForkJoinPool forkJoinPool;
 
 	public Controller(View view){
 		this.stopFlag = new Flag();
@@ -23,6 +23,7 @@ public class Controller implements InputListener {
 
 	public synchronized void started(File dir, File wordsFile, int nMostFreqWords){
 		stopFlag.reset();
+		this.forkJoinPool = new ForkJoinPool();
 		forkJoinPool.submit(new MasterTask(wordsFile, dir, nMostFreqWords,stopFlag, view));
 	}
 

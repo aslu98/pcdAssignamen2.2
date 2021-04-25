@@ -1,6 +1,5 @@
-package part2.a.model;
+package part2.a.model.train;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class TrainState {
@@ -39,4 +38,13 @@ public class TrainState {
         return actualDelay;
     }
 
+    @Override
+    public String toString() {
+        String str =  "train " + trainId + ", last stop: " + lastStop.getStation() + " (" + lastStop.getStationCode() + ")"
+                + ", actual delay: " + actualDelay + "\nstops:";
+        for (Stop stop: stops){
+            str += stop.toString();
+        }
+        return str + "\n";
+    }
 }

@@ -5,11 +5,9 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientSession;
 import io.vertx.ext.web.codec.BodyCodec;
-import part2.a.model.Solution;
+import part2.a.model.solution.Solution;
+import part2.a.model.solution.SolutionsWrapper;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,15 +19,16 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
     private final String date;
     private final String time;
     private WebClientSession session;
-    private final List<Solution> solutions;
+    private SolutionsWrapper solutionsWrap;
 
-    public TrainSolutionsAPIAgent(Promise<List<Solution>> solutionsPromise, final String from, final String to, final String date, final String time) {
+    public TrainSolutionsAPIAgent(Promise<SolutionsWrapper> solutionsPromise, final String from, final String to, final String date, final String time) {
         super(solutionsPromise, "TrainSolutionAgent", "www.lefrecce.it", 443);
-        this.solutions = new LinkedList<>();
         this.from = from;
         this.to = to;
         this.date = date;
         this.time = time;
+        List<Solution> s = new LinkedList<>();
+        this.solutionsWrap = new SolutionsWrapper(s, NUM_SOLUTIONS, this);
     }
 
     public void start() {
@@ -44,12 +43,11 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
                     JsonArray body = response.body();
                     for (int i = 0; i < NUM_SOLUTIONS; i++){
                         JsonObject obj = body.getJsonObject(i);
-                        solutions.add(this.createSolution(obj));
+                        solutionsWrap.getSolutions().add(this.createSolution(obj));
                         requestDetails(obj.getString("idsolution"), i);
                     }
                 })
-                .onFailure(err ->
-                        log("Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
 
     }
 
@@ -61,12 +59,12 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
                 .onSuccess(response -> {
                     JsonArray body = response.body();
                     addSolutionDetails(body.getJsonObject(0), pos);
-                    if (pos + 1 == NUM_SOLUTIONS){
-                        super.getPromise().complete(solutions);
-                    }
                 })
-                .onFailure(err ->
-                    log("requestDetails Something went wrong " + err.getMessage()));
+                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()));
+    }
+
+    public void SolutionsReady(){
+        super.getPromise().complete(solutionsWrap);
     }
 
     private Solution createSolution(final JsonObject jsonSolution){
@@ -74,14 +72,13 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
         String origin = jsonSolution.getString("origin");
         String destination = jsonSolution.getString("destination");
         String direction = jsonSolution.getString("direction");
-        LocalDateTime departureTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(jsonSolution.getLong("departuretime")), ZoneId.systemDefault());
-        LocalDateTime arrivalTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(jsonSolution.getLong("departuretime")), ZoneId.systemDefault());
+        Long departureTime = jsonSolution.getLong("departuretime");
+        Long arrivalTime = jsonSolution.getLong("arrivaltime");
         Double minprice = (double)((int)(jsonSolution.getFloat("minprice")*100))/100;
         String duration = jsonSolution.getString("duration");
         Integer changesno = jsonSolution.getInteger("changesno");
         Boolean saleable = jsonSolution.getBoolean("saleable");
-
-        return new Solution(id, origin, destination, direction, departureTime, arrivalTime, minprice, duration, changesno, saleable);
+        return new Solution(id, origin, destination, direction, departureTime, arrivalTime, minprice, duration, changesno, saleable, solutionsWrap);
     }
 
     private void addSolutionDetails(final JsonObject jsonDetails, final int pos){
@@ -92,7 +89,7 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
         for (Object stop: stoplist){
             stopStations.add(((JsonObject) stop).getString("stationname"));
         }
-        solutions.get(pos).addDetails(trainid,trainacronym, stopStations);
+        solutionsWrap.getSolutions().get(pos).addDetails(trainid,trainacronym, stopStations);
     }
 
     private String getSolutionsURI(){

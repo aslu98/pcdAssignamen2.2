@@ -6,15 +6,17 @@ import io.vertx.core.Vertx;
 import part2.a.agency.RealTimeStationAPIAgent;
 import part2.a.agency.RealTimeTrainAPIAgent;
 import part2.a.agency.TrainSolutionsAPIAgent;
-import part2.a.model.Solution;
-import part2.a.model.TrainState;
+import part2.a.model.solution.Solution;
+import part2.a.model.solution.SolutionsWrapper;
+import part2.a.model.station.StationState;
+import part2.a.model.train.TrainState;
 
 import java.util.List;
 
 public class TrainAPI {
 
-    public static Future<List<Solution>> getTrainSolutions(final String from, final String to, final String date, final String time){
-        Promise<List<Solution>> promise = Promise.promise();
+    public static Future<SolutionsWrapper> getTrainSolutions(final String from, final String to, final String date, final String time){
+        Promise<SolutionsWrapper> promise = Promise.promise();
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new TrainSolutionsAPIAgent(promise, from, to, date, time));
         return promise.future();
@@ -27,8 +29,8 @@ public class TrainAPI {
         return promise.future();
     }
 
-    public static Future<Integer> getRealTimeStationInfo(final String stationCode){
-        Promise<Integer> promise = Promise.promise();
+    public static Future<StationState> getRealTimeStationInfo(final String stationCode){
+        Promise<StationState> promise = Promise.promise();
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new RealTimeStationAPIAgent(promise, stationCode));
         return promise.future();
