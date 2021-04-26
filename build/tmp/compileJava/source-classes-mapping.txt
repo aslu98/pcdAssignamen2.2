@@ -4,8 +4,8 @@ part1/Main.java
  part1.Main
 part1/Flag.java
  part1.Flag
-part2/b/Monitorer.java
- part2.b.Monitorer
+part2/b/RealTimeSubject.java
+ part2.b.RealTimeSubject
 part2/b/InputListener.java
  part2.b.InputListener
 part1/jpf/FileMockImpl.java
@@ -16,8 +16,8 @@ part2/a/agency/BasicAPIAgent.java
  part2.a.agency.BasicAPIAgent
 part2/a/model/station/ArrTrainInStation.java
  part2.a.model.station.ArrTrainInStation
-part2/b/Flag.java
- part2.b.Flag
+part2/a/agency/RealTimeTrainAPIAgent.java
+ part2.a.agency.RealTimeTrainAPIAgent
 part1/jpf/BasicTask.java
  part1.jpf.BasicTask
 part2/b/view/ViewFrame.java
@@ -34,18 +34,18 @@ part1/ViewFrame.java
  part1.ViewFrame
 part1/Controller.java
  part1.Controller
-part2/a/model/train/TrainState.java
- part2.a.model.train.TrainState
+part2/b/Main.java
+ part2.b.Main
 part1/jpf/File.java
  part1.jpf.File
 part1/jpf/DirMockImpl.java
  part1.jpf.DirMockImpl
-part2/a/agency/RealTimeTrainAPIAgent.java
- part2.a.agency.RealTimeTrainAPIAgent
 part1/jpf/TextAnalyzerTask.java
  part1.jpf.TextAnalyzerTask
-part2/b/Controller.java
- part2.b.Controller
+part2/a/agency/TrainSolutionsAPIAgent.java
+ part2.a.agency.TrainSolutionsAPIAgent
+part2/a/TrainAPI.java
+ part2.a.TrainAPI
 part1/MasterTask.java
  part1.MasterTask
 part2/a/model/station/StationState.java
@@ -62,22 +62,22 @@ part2/a/APIMain.java
  part2.a.APIMain
 part2/a/model/station/TrainInStation.java
  part2.a.model.station.TrainInStation
-part2/b/Main.java
- part2.b.Main
+part2/a/model/solution/Solution.java
+ part2.a.model.solution.Solution
 part1/WordFreqMap.java
  part1.WordFreqMap
-part2/a/model/train/TimeInfo.java
- part2.a.model.train.TimeInfo
+part2/b/Monitorer.java
+ part2.b.Monitorer
 part1/BasicTask.java
  part1.BasicTask
-part2/b/RealTimeSubject.java
- part2.b.RealTimeSubject
+part1/jpf/ModelCheckingData.java
+ part1.jpf.ModelCheckingData
 part2/a/agency/RealTimeStationAPIAgent.java
  part2.a.agency.RealTimeStationAPIAgent
 part1/jpf/Master.java
  part1.jpf.Master
-part2/a/model/train/Stop.java
- part2.a.model.train.Stop
+part2/b/Flag.java
+ part2.b.Flag
 part1/jpf/WordFreqMap.java
  part1.jpf.WordFreqMap
 part1/View.java
@@ -88,15 +88,15 @@ part1/jpf/DocLoaderTask.java
  part1.jpf.DocLoaderTask
 part2/a/agency/RealTimeAPIAgent.java
  part2.a.agency.RealTimeAPIAgent
-part1/jpf/ModelCheckingData.java
- part1.jpf.ModelCheckingData
-part2/b/BasicAgent.java
- part2.b.BasicAgent
-part2/a/agency/TrainSolutionsAPIAgent.java
- part2.a.agency.TrainSolutionsAPIAgent
-part2/a/TrainAPI.java
- part2.a.TrainAPI
 part2/a/model/solution/SolutionsWrapper.java
  part2.a.model.solution.SolutionsWrapper
-part2/a/model/solution/Solution.java
- part2.a.model.solution.Solution
+part2/b/BasicAgent.java
+ part2.b.BasicAgent
+part2/b/Controller.java
+ part2.b.Controller
+part2/a/model/train/TrainState.java
+ part2.a.model.train.TrainState
+part2/a/model/train/TimeInfo.java
+ part2.a.model.train.TimeInfo
+part2/a/model/train/Stop.java
+ part2.a.model.train.Stop

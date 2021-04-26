@@ -21,93 +21,106 @@ import java.util.ArrayList;
 public class ViewFrame extends JFrame implements ActionListener {
 
 	private JButton findButton;
-	private JButton stopButton;
-	private JButton chooseDir;
-	private JButton chooseFile;
+	private JButton trainMonitorButton;
+	private JButton stationMonitorButton;
+	private JButton stopMonitoringButton;
 	private JTextField fromField;
 	private JTextField toField;
 	private JTextField dateField;
 	private JTextField timeField;
+	private JTextField codeField;
 	private JTextField state;
-	private JLabel selectedDir;
-	private JLabel selectedFile;
 	private JTextArea solutions;
-	private JFileChooser startDirectoryChooser;
-	private JFileChooser wordsToDiscardFileChooser;
-	
-	private File dir;
-	private File wordsToDiscardFile;
+	private JTextArea monitoring;
 	
 	private ArrayList<InputListener> listeners;
 
 	public ViewFrame(){
 		super(".:: Trains ::.");
-		setSize(800,600);
+		setSize(800,620);
 		listeners = new ArrayList<InputListener>();
 		
 		findButton = new JButton("find");
-		stopButton = new JButton("stop");
-		chooseDir = new JButton("select dir");
-		chooseFile = new JButton("select file");
-		
-		selectedDir = new JLabel("test/ass01/data-ita");
-		selectedDir.setSize(200,14);
-		selectedFile = new JLabel("test/ass01/data-ita/config.txt");
-		selectedFile.setSize(200,14);
-
+		trainMonitorButton = new JButton("monitor train");
+		stationMonitorButton = new JButton("monitor station");
+		stopMonitoringButton = new JButton("stop monitoring");
 		fromField = new JTextField("  Ancona  ");
 		toField = new JTextField("  Bologna Centrale  ");
 		dateField = new JTextField("  25/04/2021  ");
 		timeField = new JTextField("  11.30  ");
+		codeField = new JTextField("         ");
 
-		JPanel controlPanel1 = new JPanel();
-		controlPanel1.add(new JLabel("From: "));
-		controlPanel1.add(fromField);
-		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
-		controlPanel1.add(new JLabel("To: "));
-		controlPanel1.add(toField);
-		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
-		controlPanel1.add(new JLabel("Date: "));
-		controlPanel1.add(dateField);
-		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
-		controlPanel1.add(new JLabel("Time: "));
-		controlPanel1.add(timeField);
-		controlPanel1.add(Box.createRigidArea(new Dimension(40,0)));
-		controlPanel1.add(findButton);
-		
-		JPanel controlPanel2 = new JPanel();
+		JPanel controlSolutionsPanel = new JPanel();
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlSolutionsPanel.add(new JLabel("From: "));
+		controlSolutionsPanel.add(fromField);
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlSolutionsPanel.add(new JLabel("To: "));
+		controlSolutionsPanel.add(toField);
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlSolutionsPanel.add(new JLabel("Date: "));
+		controlSolutionsPanel.add(dateField);
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlSolutionsPanel.add(new JLabel("Time: "));
+		controlSolutionsPanel.add(timeField);
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(40,0)));
+		controlSolutionsPanel.add(findButton);
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlSolutionsPanel.setLayout(new BoxLayout(controlSolutionsPanel, BoxLayout.X_AXIS));
 
-		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
-		controlPanel.add(controlPanel1);
-		controlPanel.add(controlPanel2);
-		
-		JPanel wordsPanel = new JPanel();
+		JPanel solutionsPanel = new JPanel();
 		solutions = new JTextArea(15,40);
-		wordsPanel.add(solutions);
-		JScrollPane scrollPane=new JScrollPane(wordsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		solutionsPanel.add(solutions);
+		JScrollPane scrollSolutionsPane=new JScrollPane(solutionsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JPanel controlMonitoringPanel = new JPanel();
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlMonitoringPanel.add(new JLabel("     CODE of train/station to monitor: "));
+		controlMonitoringPanel.add(codeField);
+		controlMonitoringPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlMonitoringPanel.add(trainMonitorButton);
+		controlMonitoringPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlMonitoringPanel.add(stationMonitorButton);
+		controlMonitoringPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlMonitoringPanel.add(stopMonitoringButton);
+		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		controlMonitoringPanel.setLayout(new BoxLayout(controlMonitoringPanel, BoxLayout.X_AXIS));
+
+		JPanel monitoringPanel = new JPanel();
+		monitoring = new JTextArea(15,40);
+		monitoringPanel.add(monitoring);
+		JScrollPane scrollMonitoringPanel=new JScrollPane(monitoringPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JPanel centralPanel = new JPanel();
+		LayoutManager layout = new BorderLayout();
+		centralPanel.setLayout(layout);
+		centralPanel.add(BorderLayout.NORTH,scrollSolutionsPane);
+		centralPanel.add(BorderLayout.CENTER,controlMonitoringPanel);
+		centralPanel.add(BorderLayout.SOUTH, scrollMonitoringPanel);
 
 		JPanel infoPanel = new JPanel();
-		state = new JTextField("ready.",40);
+		state = new JTextField("Ready.",40);
 		state.setSize(700, 14);
 		infoPanel.add(state);
 		
 		JPanel cp = new JPanel();
-		LayoutManager layout = new BorderLayout();
-		cp.setLayout(layout);
-		cp.add(BorderLayout.NORTH,controlPanel);
-		cp.add(BorderLayout.CENTER,scrollPane);
+		LayoutManager layoutCP = new BorderLayout();
+		cp.setLayout(layoutCP);
+		cp.add(BorderLayout.NORTH,controlSolutionsPanel);
+		cp.add(BorderLayout.CENTER,centralPanel);
 		cp.add(BorderLayout.SOUTH, infoPanel);
 		setContentPane(cp);		
 		
 		findButton.addActionListener(this);
-		stopButton.addActionListener(this);
-		chooseDir.addActionListener(this);
-		chooseFile.addActionListener(this);
-		
+		trainMonitorButton.addActionListener(this);
+		stationMonitorButton.addActionListener(this);
+		stopMonitoringButton.addActionListener(this);
+
 		this.findButton.setEnabled(true);
-		this.stopButton.setEnabled(false);
-		
+		this.trainMonitorButton.setEnabled(true);
+		this.stationMonitorButton.setEnabled(true);
+		this.stopMonitoringButton.setEnabled(false);
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
@@ -118,21 +131,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent ev){
 		Object src = ev.getSource();
-		if (src == chooseDir) {
-			startDirectoryChooser = new JFileChooser();
-		    int returnVal = startDirectoryChooser.showOpenDialog(this);
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		        dir = startDirectoryChooser.getSelectedFile();
-		        selectedDir.setText(dir.getAbsolutePath());
-		     }
-		} else if (src == chooseFile) {
-			wordsToDiscardFileChooser = new JFileChooser();
-		    int returnVal = wordsToDiscardFileChooser.showOpenDialog(this);
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		    	wordsToDiscardFile = wordsToDiscardFileChooser.getSelectedFile();
-		        selectedFile.setText(wordsToDiscardFile.getAbsolutePath());
-		     }		    
-		} else if (src == findButton) {
+		if (src == findButton) {
 			String from = fromField.getText().trim();
 			String to = toField.getText().trim();
 			String date = dateField.getText().trim();
@@ -140,15 +139,26 @@ public class ViewFrame extends JFrame implements ActionListener {
 			this.state.setText("Finding...");
 			this.notifyFindSolutions(from, to, date, time);
 			this.findButton.setEnabled(false);
-			
-		} else if (src == stopButton) {
-			//this.notifyStopped();
-			this.state.setText("Stopped.");
-
-			this.findButton.setEnabled(true);
-			this.stopButton.setEnabled(false);
-			chooseDir.setEnabled(true);
-			chooseFile.setEnabled(true);
+		} else if (src == trainMonitorButton){
+			String code = codeField.getText().trim();
+			this.state.setText("Monitoring...");
+			this.notifyStartMonitoringTrain(code);
+			this.stationMonitorButton.setEnabled(false);
+			this.trainMonitorButton.setEnabled(false);
+			this.stopMonitoringButton.setEnabled(true);
+		} else if (src == trainMonitorButton){
+			String code = codeField.getText().trim();
+			this.state.setText("Monitoring...");
+			this.notifyStartMonitoringStation(code);
+			this.stationMonitorButton.setEnabled(false);
+			this.trainMonitorButton.setEnabled(false);
+			this.stopMonitoringButton.setEnabled(true);
+		} else if (src == trainMonitorButton){
+			this.state.setText("Ready.");
+			this.notifyStopMonitoring();
+			this.stationMonitorButton.setEnabled(true);
+			this.trainMonitorButton.setEnabled(true);
+			this.stopMonitoringButton.setEnabled(false);
 		}
 
 	}
@@ -192,19 +202,8 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 	public void updateMonitoring(String state) {
 		SwingUtilities.invokeLater(() -> {
-			//update mon
+			monitoring.setText(state);
 		});
-	}
-	
-	public void done() {
-		SwingUtilities.invokeLater(() -> {
-			this.findButton.setEnabled(true);
-			this.stopButton.setEnabled(false);
-			chooseDir.setEnabled(true);
-			chooseFile.setEnabled(true);
-			this.state.setText("Done.");
-		});
-
 	}
 
 }

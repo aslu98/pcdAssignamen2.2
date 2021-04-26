@@ -41,7 +41,7 @@ public class TrainState {
     @Override
     public String toString() {
         String str =  "train " + trainId + ", last stop: " + lastStop.getStation() + " (" + lastStop.getStationCode() + ")"
-                + ", actual delay: " + actualDelay + "\nstops:";
+                + ", actual delay: " + actualDelay + "\n     stops:";
         for (Stop stop: stops){
             str += stop.toString();
         }

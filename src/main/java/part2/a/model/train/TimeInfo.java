@@ -65,8 +65,8 @@ public class TimeInfo {
                         + " departure delay: " + arrivalDelay)
                     + "\n";
         } else {
-            return (arriveScheduled == 0 ? "" : "\n\t\tarrive: " + TimeUtils.getStringTime(arriveScheduled))
-                    + (departureScheduled == 0 ? "" : "\n\t\tdeparture: " + TimeUtils.getStringTime(departureScheduled));
+            return (arriveScheduled == 0 ? "" : "  arrive: " + TimeUtils.getStringTime(arriveScheduled))
+                    + (departureScheduled == 0 ? "" : "  departure: " + TimeUtils.getStringTime(departureScheduled));
         }
     }
 }

@@ -15,23 +15,22 @@ import java.util.List;
 
 public class TrainAPI {
 
-    public static Future<SolutionsWrapper> getTrainSolutions(final String from, final String to, final String date, final String time){
+    Vertx vertx = Vertx.vertx();
+
+    public Future<SolutionsWrapper> getTrainSolutions(final String from, final String to, final String date, final String time){
         Promise<SolutionsWrapper> promise = Promise.promise();
-        Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new TrainSolutionsAPIAgent(promise, from, to, date, time));
         return promise.future();
     }
 
-    public static Future<TrainState> getRealTimeTrainInfo(final String trainCode){
+    public Future<TrainState> getRealTimeTrainInfo(final String trainCode){
         Promise<TrainState> promise = Promise.promise();
-        Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new RealTimeTrainAPIAgent(promise, trainCode));
         return promise.future();
     }
 
-    public static Future<StationState> getRealTimeStationInfo(final String stationCode){
+    public Future<StationState> getRealTimeStationInfo(final String stationCode){
         Promise<StationState> promise = Promise.promise();
-        Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new RealTimeStationAPIAgent(promise, stationCode));
         return promise.future();
     }

@@ -8,15 +8,15 @@ public class Flag {
 		flag = false;
 	}
 	
-	public synchronized void reset() {
+	public void reset() {
 		flag = false;
 	}
 	
-	public synchronized void set() {
+	public void set() {
 		flag = true;
 	}
 	
-	public synchronized boolean isSet() {
+	public Boolean isSet() {
 		return flag;
 	}
 }

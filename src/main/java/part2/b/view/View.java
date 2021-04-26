@@ -37,10 +37,6 @@ public class View {
 	public void updateMonitoring(String state) {
 		frame.updateMonitoring(state);
 	}
-	
-	public void done() {
-		frame.done();
-	}
 
 }
 	

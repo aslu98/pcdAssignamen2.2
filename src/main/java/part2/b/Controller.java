@@ -27,7 +27,7 @@ public class Controller implements InputListener {
 
 	@Override
 	public void findSolutions(String from, String to, String date, String time) {
-		Future<SolutionsWrapper> fut = TrainAPI.getTrainSolutions(from, to, date, time);
+		Future<SolutionsWrapper> fut = new TrainAPI().getTrainSolutions(from, to, date, time);
 		fut.onSuccess((SolutionsWrapper res) -> {
 			view.updateSolutions(res.toString());
 		}).onFailure((Throwable t) -> {

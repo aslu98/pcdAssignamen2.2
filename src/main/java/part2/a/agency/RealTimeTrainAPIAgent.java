@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
 
@@ -29,6 +30,7 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                 .send()
                 .onSuccess(response -> {
                     this.setStationCode(response.bodyAsString());
+                    log (response.bodyAsString());
                     this.getRealTimeData();
                 })
                 .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
@@ -74,6 +76,6 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
 
     private void setStationCode(final String response){
         int start = response.indexOf("|") + super.getCode().length() + 2;
-        this.departureStationCode = response.substring(start, start + 6);
+        this.departureStationCode = response.substring(start, start + 6).toUpperCase(Locale.ROOT);
     }
 }

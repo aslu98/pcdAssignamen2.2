@@ -35,7 +35,7 @@ public class APIMain {
 
 		log("dopofut");*/
 
-		Future<StationState> fut = TrainAPI.getRealTimeStationInfo("S05043");
+		Future<StationState> fut = new TrainAPI().getRealTimeStationInfo("S05043");
 
 		fut.onSuccess((StationState res) -> {
 			log("success: " + res.toString());
