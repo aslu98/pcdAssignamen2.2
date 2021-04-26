@@ -26,8 +26,8 @@ public class View {
         });
     }
 
-    public void errorOccurred(String err){
-		frame.errorOccurred(err);
+    public void blockingErrorOccurred(String err){
+		frame.blockingErrorOccurred(err);
 	}
 
     public void updateSolutions(String state){
@@ -36,6 +36,10 @@ public class View {
 	
 	public void updateMonitoring(String state) {
 		frame.updateMonitoring(state);
+	}
+
+	public void stopMonitoring() {
+		frame.stopMonitoring();
 	}
 
 }

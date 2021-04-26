@@ -2,6 +2,7 @@ package part2.a.agency;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.ext.web.client.HttpResponse;
 
 public abstract class BasicAPIAgent<T>  extends AbstractVerticle {
     private final String name;
@@ -30,5 +31,12 @@ public abstract class BasicAPIAgent<T>  extends AbstractVerticle {
 
     protected int getPort() {
         return port;
+    }
+
+    protected boolean checkNull(HttpResponse response){
+        if (response == null){
+            this.promise.fail("Response is null");
+        }
+        return response == null;
     }
 }

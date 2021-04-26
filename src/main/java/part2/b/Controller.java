@@ -32,7 +32,7 @@ public class Controller implements InputListener {
 			view.updateSolutions(res.toString());
 		}).onFailure((Throwable t) -> {
 			log("failure: " + t.getMessage());
-			view.errorOccurred(t.getMessage());
+			view.blockingErrorOccurred(t.getMessage());
 		}).onComplete((AsyncResult<SolutionsWrapper> res) -> {
 			log("findSolutions completed");
 		});
@@ -40,6 +40,7 @@ public class Controller implements InputListener {
 
 	@Override
 	public void startMonitoring(String code, RealTimeSubject subject) {
+		stopFlag.reset();
 		Vertx vertx = Vertx.vertx();
 		vertx.deployVerticle(new Monitorer(view, stopFlag, subject, code));
 	}

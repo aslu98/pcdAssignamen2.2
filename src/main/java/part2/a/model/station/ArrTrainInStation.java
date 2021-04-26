@@ -15,6 +15,6 @@ public class ArrTrainInStation extends TrainInStation{
     @Override
     public String toString() {
         return "ARR train " + trainCode + " (" + trainCategory + ") " + " from " + origin + " (" + originCode + ")"
-                + "\n\t\tarrive: " + arriveTime + "\tactual delay: " + delay + " min.";
+                + "\n      arrive: " + arriveTime + "   actual delay: " + delay + " min.";
     }
 }

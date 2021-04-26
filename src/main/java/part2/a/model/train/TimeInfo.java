@@ -57,10 +57,10 @@ public class TimeInfo {
     @Override
     public String toString() {
         if (stationReached) {
-            return (arriveScheduled == 0 ? "" : "\n\t\tarrive: " + TimeUtils.getStringTime(arriveScheduled)
+            return (arriveScheduled == 0 ? "" : "   arrive: " + TimeUtils.getStringTime(arriveScheduled)
                         + " real arrive: " + TimeUtils.getStringTime(arriveReal)
                         + " arrive delay: " + arrivalDelay)
-                    + (departureScheduled == 0 ? "" : "\n\t\tdeparture: " + TimeUtils.getStringTime(departureScheduled)
+                    + (departureScheduled == 0 ? "" : "\n     departure: " + TimeUtils.getStringTime(departureScheduled)
                         + " real departure: " + TimeUtils.getStringTime(departureReal)
                         + " departure delay: " + arrivalDelay)
                     + "\n";

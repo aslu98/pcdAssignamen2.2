@@ -80,6 +80,6 @@ public class RealTimeStationAPIAgent extends RealTimeAPIAgent {
     private String getURI(String direction){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E%20MMM%20dd%20yyyy%20HH:mm:ss", Locale.ENGLISH);
         return "/viaggiatrenonew/resteasy/viaggiatreno/" + direction + "/" + super.getCode().toUpperCase()
-                + "/" + LocalDateTime.now().minusHours(1).minusMinutes(10).format(formatter).replace(":", "%3A")+ "%20GMT%2B0100";
+                + "/" + LocalDateTime.now().minusMinutes(10).format(formatter).replace(":", "%3A")+ "%20GMT%2B0100";
     }
 }

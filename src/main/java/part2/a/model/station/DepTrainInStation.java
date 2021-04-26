@@ -14,6 +14,6 @@ public class DepTrainInStation extends TrainInStation{
     @Override
     public String toString() {
         return "DEP train " + trainCode + " (" + trainCategory + ") to " + destination
-                + "\n\t\tdeparture: " + departureTime + "\tactual delay: " + delay + " min.";
+                + "\n      departure: " + departureTime + "   actual delay: " + delay + " min.";
     }
 }

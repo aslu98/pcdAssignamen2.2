@@ -23,7 +23,7 @@ public class StationState {
     public String toString() {
         String str = "\nstation " + stationCode;
         for (TrainInStation t: trains) {
-            str += "\n\t" + t.toString();
+            str += "\n   " + t.toString();
         }
         return str + "\n";
     }

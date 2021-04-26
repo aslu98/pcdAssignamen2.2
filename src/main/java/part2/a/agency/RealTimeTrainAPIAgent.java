@@ -30,7 +30,6 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                 .send()
                 .onSuccess(response -> {
                     this.setStationCode(response.bodyAsString());
-                    log (response.bodyAsString());
                     this.getRealTimeData();
                 })
                 .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
@@ -42,24 +41,26 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                 .as(BodyCodec.jsonArray())
                 .send()
                 .onSuccess(response -> {
-                    List<Stop> stops = new LinkedList<>();
-                    TrainState train = new TrainState(super.getCode());
-                    for(Object obj : response.body()){
-                        JsonObject jsonStop = (JsonObject) obj;
-                        String stationCode = jsonStop.getString("id");
-                        String station = jsonStop.getString("stazione");
-                        JsonObject jsonFermata = jsonStop.getJsonObject("fermata");
-                        Long arrivalScheduled = jsonFermata.getLong("arrivo_teorico");
-                        Long departureScheduled = jsonFermata.getLong("partenza_teorica");
-                        Stop stop = new Stop(station, stationCode, arrivalScheduled == null ? 0 : arrivalScheduled, departureScheduled == null ? 0 : departureScheduled);
-                        stops.add(stop);
-                        if (jsonStop.getBoolean("stazioneCorrente")){
-                            int actualDelay = jsonFermata.getInteger("ritardo");
-                            train.addState(actualDelay, stop);
+                    if (!checkNull(response)){
+                        List<Stop> stops = new LinkedList<>();
+                        TrainState train = new TrainState(super.getCode());
+                        for(Object obj : response.body()){
+                            JsonObject jsonStop = (JsonObject) obj;
+                            String stationCode = jsonStop.getString("id");
+                            String station = jsonStop.getString("stazione");
+                            JsonObject jsonFermata = jsonStop.getJsonObject("fermata");
+                            Long arrivalScheduled = jsonFermata.getLong("arrivo_teorico");
+                            Long departureScheduled = jsonFermata.getLong("partenza_teorica");
+                            Stop stop = new Stop(station, stationCode, arrivalScheduled == null ? 0 : arrivalScheduled, departureScheduled == null ? 0 : departureScheduled);
+                            stops.add(stop);
+                            if (jsonStop.getBoolean("stazioneCorrente")){
+                                int actualDelay = jsonFermata.getInteger("ritardo");
+                                train.addState(actualDelay, stop);
+                            }
                         }
+                        train.addStops(stops);
+                        super.getPromise().complete(train);
                     }
-                    train.addStops(stops);
-                    super.getPromise().complete(train);
                 })
                 .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
                         + "\n URI was " + this.realTimeURI()));

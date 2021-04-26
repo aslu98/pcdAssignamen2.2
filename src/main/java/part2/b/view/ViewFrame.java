@@ -1,6 +1,5 @@
 package part2.b.view;
 
-import part2.a.model.train.TrainState;
 import part2.b.InputListener;
 import part2.b.RealTimeSubject;
 
@@ -8,16 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
-/**
- * 
- * GUI component of the view.
- * 
- * @author aricci
- *
- */
 public class ViewFrame extends JFrame implements ActionListener {
 
 	private JButton findButton;
@@ -30,14 +21,13 @@ public class ViewFrame extends JFrame implements ActionListener {
 	private JTextField timeField;
 	private JTextField codeField;
 	private JTextField state;
-	private JTextArea solutions;
-	private JTextArea monitoring;
+	private JTextArea textArea;
 	
 	private ArrayList<InputListener> listeners;
 
 	public ViewFrame(){
 		super(".:: Trains ::.");
-		setSize(800,620);
+		setSize(800,800);
 		listeners = new ArrayList<InputListener>();
 		
 		findButton = new JButton("find");
@@ -48,7 +38,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 		toField = new JTextField("  Bologna Centrale  ");
 		dateField = new JTextField("  25/04/2021  ");
 		timeField = new JTextField("  11.30  ");
-		codeField = new JTextField("         ");
+		codeField = new JTextField("  S07810  ");
 
 		JPanel controlSolutionsPanel = new JPanel();
 		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
@@ -68,11 +58,6 @@ public class ViewFrame extends JFrame implements ActionListener {
 		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
 		controlSolutionsPanel.setLayout(new BoxLayout(controlSolutionsPanel, BoxLayout.X_AXIS));
 
-		JPanel solutionsPanel = new JPanel();
-		solutions = new JTextArea(15,40);
-		solutionsPanel.add(solutions);
-		JScrollPane scrollSolutionsPane=new JScrollPane(solutionsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
 		JPanel controlMonitoringPanel = new JPanel();
 		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
 		controlMonitoringPanel.add(new JLabel("     CODE of train/station to monitor: "));
@@ -86,17 +71,15 @@ public class ViewFrame extends JFrame implements ActionListener {
 		controlSolutionsPanel.add(Box.createRigidArea(new Dimension(20,0)));
 		controlMonitoringPanel.setLayout(new BoxLayout(controlMonitoringPanel, BoxLayout.X_AXIS));
 
-		JPanel monitoringPanel = new JPanel();
-		monitoring = new JTextArea(15,40);
-		monitoringPanel.add(monitoring);
-		JScrollPane scrollMonitoringPanel=new JScrollPane(monitoringPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+		controlPanel.add(controlSolutionsPanel);
+		controlPanel.add(controlMonitoringPanel);
 
-		JPanel centralPanel = new JPanel();
-		LayoutManager layout = new BorderLayout();
-		centralPanel.setLayout(layout);
-		centralPanel.add(BorderLayout.NORTH,scrollSolutionsPane);
-		centralPanel.add(BorderLayout.CENTER,controlMonitoringPanel);
-		centralPanel.add(BorderLayout.SOUTH, scrollMonitoringPanel);
+		JPanel textAreaPanel = new JPanel();
+		textArea = new JTextArea(35,40);
+		textAreaPanel.add(textArea);
+		JScrollPane scrollTextAreaPane=new JScrollPane(textAreaPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		JPanel infoPanel = new JPanel();
 		state = new JTextField("Ready.",40);
@@ -106,8 +89,8 @@ public class ViewFrame extends JFrame implements ActionListener {
 		JPanel cp = new JPanel();
 		LayoutManager layoutCP = new BorderLayout();
 		cp.setLayout(layoutCP);
-		cp.add(BorderLayout.NORTH,controlSolutionsPanel);
-		cp.add(BorderLayout.CENTER,centralPanel);
+		cp.add(BorderLayout.NORTH,controlPanel);
+		cp.add(BorderLayout.CENTER,scrollTextAreaPane);
 		cp.add(BorderLayout.SOUTH, infoPanel);
 		setContentPane(cp);		
 		
@@ -116,10 +99,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 		stationMonitorButton.addActionListener(this);
 		stopMonitoringButton.addActionListener(this);
 
-		this.findButton.setEnabled(true);
-		this.trainMonitorButton.setEnabled(true);
-		this.stationMonitorButton.setEnabled(true);
-		this.stopMonitoringButton.setEnabled(false);
+		initializeButtons();
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -136,31 +116,42 @@ public class ViewFrame extends JFrame implements ActionListener {
 			String to = toField.getText().trim();
 			String date = dateField.getText().trim();
 			String time = timeField.getText().trim();
-			this.state.setText("Finding...");
+			this.state.setText("Finding solutions...");
 			this.notifyFindSolutions(from, to, date, time);
 			this.findButton.setEnabled(false);
 		} else if (src == trainMonitorButton){
 			String code = codeField.getText().trim();
-			this.state.setText("Monitoring...");
+			this.state.setText("Monitoring train " + code);
 			this.notifyStartMonitoringTrain(code);
-			this.stationMonitorButton.setEnabled(false);
-			this.trainMonitorButton.setEnabled(false);
-			this.stopMonitoringButton.setEnabled(true);
-		} else if (src == trainMonitorButton){
+			monitoringButtons();
+		} else if (src == stationMonitorButton){
 			String code = codeField.getText().trim();
-			this.state.setText("Monitoring...");
+			this.state.setText("Monitoring station " + code);
 			this.notifyStartMonitoringStation(code);
-			this.stationMonitorButton.setEnabled(false);
-			this.trainMonitorButton.setEnabled(false);
-			this.stopMonitoringButton.setEnabled(true);
-		} else if (src == trainMonitorButton){
+			monitoringButtons();
+		} else if (src == stopMonitoringButton){
 			this.state.setText("Ready.");
 			this.notifyStopMonitoring();
 			this.stationMonitorButton.setEnabled(true);
 			this.trainMonitorButton.setEnabled(true);
 			this.stopMonitoringButton.setEnabled(false);
+			this.findButton.setEnabled(true);
 		}
 
+	}
+
+	private void monitoringButtons(){
+		this.stationMonitorButton.setEnabled(false);
+		this.trainMonitorButton.setEnabled(false);
+		this.stopMonitoringButton.setEnabled(true);
+		this.findButton.setEnabled(false);
+	}
+
+	private void initializeButtons(){
+		this.findButton.setEnabled(true);
+		this.trainMonitorButton.setEnabled(true);
+		this.stationMonitorButton.setEnabled(true);
+		this.stopMonitoringButton.setEnabled(false);
 	}
 
 	private void notifyFindSolutions(String from, String to, String date, String time){
@@ -187,14 +178,15 @@ public class ViewFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	public void errorOccurred(String err){
-		this.state.setText(err);
-		this.findButton.setEnabled(true);
+	public void blockingErrorOccurred(String err){
+		this.textArea.setText(err);
+		this.state.setText("Ready.");
+		initializeButtons();
 	}
 	
 	public void updateSolutions(String state) {
 		SwingUtilities.invokeLater(() -> {
-			this.solutions.setText(state);
+			this.textArea.setText(state);
 			this.state.setText("Ready.");
 			this.findButton.setEnabled(true);
 		});
@@ -202,7 +194,13 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 	public void updateMonitoring(String state) {
 		SwingUtilities.invokeLater(() -> {
-			monitoring.setText(state);
+			textArea.setText(state);
+		});
+	}
+
+	public void stopMonitoring(){
+		SwingUtilities.invokeLater(() -> {
+			textArea.setText("");
 		});
 	}
 

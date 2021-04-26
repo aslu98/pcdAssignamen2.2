@@ -30,6 +30,6 @@ public class Stop {
 
     @Override
     public String toString() {
-        return "\n\tstation " + station + " (" + stationCode +") " + timeInfo.toString();
+        return "\n\t" + station + " (" + stationCode +") " + timeInfo.toString();
     }
 }
