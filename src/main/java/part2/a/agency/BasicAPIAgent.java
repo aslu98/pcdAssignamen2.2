@@ -2,9 +2,9 @@ package part2.a.agency;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
-import io.vertx.ext.web.client.HttpResponse;
+import io.vertx.core.json.JsonArray;
 
-public abstract class BasicAPIAgent<T>  extends AbstractVerticle {
+public abstract class BasicAPIAgent<T, A>  extends AbstractVerticle {
     private final String name;
     private final String host;
     private final int port;
@@ -33,7 +33,7 @@ public abstract class BasicAPIAgent<T>  extends AbstractVerticle {
         return port;
     }
 
-    protected boolean checkNull(HttpResponse response){
+    protected boolean checkNull(JsonArray response){
         if (response == null){
             this.promise.fail("Response is null");
         }

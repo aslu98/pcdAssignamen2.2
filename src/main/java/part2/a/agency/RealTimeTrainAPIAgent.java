@@ -29,8 +29,10 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
         session.get(super.getPort(), super.getHost(), this.departureStationURI())
                 .send()
                 .onSuccess(response -> {
-                    this.setStationCode(response.bodyAsString());
-                    this.getRealTimeData();
+                    if (!checkNull(response.body().toJsonArray())){
+                        this.setStationCode(response.bodyAsString());
+                        this.getRealTimeData();
+                    }
                 })
                 .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
                         + "\n URI was " + this.departureStationURI()));
@@ -41,7 +43,7 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
                 .as(BodyCodec.jsonArray())
                 .send()
                 .onSuccess(response -> {
-                    if (!checkNull(response)){
+                    if (!checkNull(response.body())){
                         List<Stop> stops = new LinkedList<>();
                         TrainState train = new TrainState(super.getCode());
                         for(Object obj : response.body()){
