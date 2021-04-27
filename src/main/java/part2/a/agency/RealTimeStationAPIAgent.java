@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Optional;
 
-public class RealTimeStationAPIAgent extends RealTimeAPIAgent<TrainInStation> {
+public class RealTimeStationAPIAgent extends RealTimeAPIAgent<StationState> {
 
     private WebClientSession session;
     private final LinkedList<TrainInStation> trains;
