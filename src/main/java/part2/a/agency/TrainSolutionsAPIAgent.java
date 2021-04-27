@@ -10,9 +10,8 @@ import part2.a.model.solution.SolutionsWrapper;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-public class TrainSolutionsAPIAgent extends BasicAPIAgent {
+public class TrainSolutionsAPIAgent extends BasicAPIAgent<SolutionsWrapper> {
 
     private final int NUM_SOLUTIONS = 5;
     private String from;
@@ -20,7 +19,7 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent {
     private final String date;
     private final String time;
     private WebClientSession session;
-    private SolutionsWrapper solutionsWrap;
+    private final SolutionsWrapper solutionsWrap;
 
     public TrainSolutionsAPIAgent(Promise<SolutionsWrapper> solutionsPromise, final String from, final String to, final String date, final String time) {
         super(solutionsPromise, "TrainSolutionAgent", "www.lefrecce.it", 443);

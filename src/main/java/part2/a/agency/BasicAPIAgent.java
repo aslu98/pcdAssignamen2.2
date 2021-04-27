@@ -5,7 +5,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonArray;
 
-public abstract class BasicAPIAgent<T, A>  extends AbstractVerticle {
+public abstract class BasicAPIAgent<T>  extends AbstractVerticle {
     private final String name;
     private final String host;
     private final int port;

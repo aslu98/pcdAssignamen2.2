@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
+public class RealTimeTrainAPIAgent extends RealTimeAPIAgent<TrainState> {
 
     private WebClientSession session;
     private String departureStationCode;
