@@ -9,12 +9,6 @@ import part2.a.model.solution.SolutionsWrapper;
 import part2.a.model.train.TrainState;
 import part2.b.view.View;
 
-/**
- * Controller part of the application - passive part.
- * 
- * @author aricci
- *
- */
 public class Controller implements InputListener {
 
 	private static final int MAX_CONSECUTIVE_ERRORS = 20;

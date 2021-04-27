@@ -26,16 +26,20 @@ public class RealTimeTrainAPIAgent extends RealTimeAPIAgent {
     public void start() {
         this.session = WebClientSession.create(WebClient.create(vertx));
 
-        session.get(super.getPort(), super.getHost(), this.departureStationURI())
-                .send()
-                .onSuccess(response -> {
-                    if (!checkNull(response.body().toJsonArray())){
-                        this.setStationCode(response.bodyAsString());
-                        this.getRealTimeData();
-                    }
-                })
-                .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
-                        + "\n URI was " + this.departureStationURI()));
+        if (!super.getCode().matches("[0-9]+")){
+            super.getPromise().fail("The code is not in the right format");
+        } else {
+            session.get(super.getPort(), super.getHost(), this.departureStationURI())
+                    .send()
+                    .onSuccess(response -> {
+                        if (!checkNull(response.body())) {
+                            this.setStationCode(response.bodyAsString());
+                            this.getRealTimeData();
+                        }
+                    })
+                    .onFailure(err -> super.getPromise().fail("Something went wrong " + err.getMessage()
+                            + "\n URI was " + this.departureStationURI()));
+        }
     }
 
     private void getRealTimeData(){

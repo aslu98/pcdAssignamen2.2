@@ -31,26 +31,30 @@ public class RealTimeStationAPIAgent extends RealTimeAPIAgent {
     public void start() {
         this.session = WebClientSession.create(WebClient.create(vertx));
 
-        String uriArrivi = this.getURI("arrivi");
-        session.get(super.getPort(), super.getHost(), uriArrivi)
-                .as(BodyCodec.jsonArray())
-                .send()
-                .onSuccess(response -> {
-                    for (Object obj: response.body()){
-                        JsonObject jsonTrain = (JsonObject) obj;
-                        String trainCode = jsonTrain.getString("numeroTreno");
-                        String trainCategory = jsonTrain.getString("categoria");
-                        String origin = jsonTrain.getString("origine");
-                        String originCode = jsonTrain.getString("codOrigine");
-                        String arriveTime = jsonTrain.getString("compOrarioArrivo");
-                        int delay = jsonTrain.getInteger("ritardo");
-                        TrainInStation train = new ArrTrainInStation(delay, trainCode, trainCategory, origin, originCode, arriveTime);
-                        trains.add(train);
-                    }
-                    this.addDepartureInfo();
-                })
-                .onFailure(err -> log("Something went wrong " + err.getMessage()
-                        + "\n URI was " + uriArrivi));
+        if (super.getCode().matches("[0-9]+")){
+            super.getPromise().fail("The code is not in the right format");
+        } else {
+            String uriArrivi = this.getURI("arrivi");
+            session.get(super.getPort(), super.getHost(), uriArrivi)
+                    .as(BodyCodec.jsonArray())
+                    .send()
+                    .onSuccess(response -> {
+                        for (Object obj: response.body()){
+                            JsonObject jsonTrain = (JsonObject) obj;
+                            String trainCode = jsonTrain.getString("numeroTreno");
+                            String trainCategory = jsonTrain.getString("categoria");
+                            String origin = jsonTrain.getString("origine");
+                            String originCode = jsonTrain.getString("codOrigine");
+                            String arriveTime = jsonTrain.getString("compOrarioArrivo");
+                            int delay = jsonTrain.getInteger("ritardo");
+                            TrainInStation train = new ArrTrainInStation(delay, trainCode, trainCategory, origin, originCode, arriveTime);
+                            trains.add(train);
+                        }
+                        this.addDepartureInfo();
+                    })
+                    .onFailure(err -> log("Something went wrong " + err.getMessage()
+                            + "\n URI was " + uriArrivi));
+        }
 
     }
 

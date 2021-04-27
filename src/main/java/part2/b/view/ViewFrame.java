@@ -1,6 +1,5 @@
 package part2.b.view;
 
-import org.apache.commons.lang3.StringUtils;
 import part2.b.InputListener;
 import part2.b.RealTimeSubject;
 
