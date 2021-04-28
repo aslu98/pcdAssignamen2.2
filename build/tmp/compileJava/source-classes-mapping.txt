@@ -104,3 +104,5 @@ part1/jpf/ModelCheckingData.java
  part1.jpf.ModelCheckingData
 part3/Main.java
  part3.Main
+part3/Flag.java
+ part3.Flag
