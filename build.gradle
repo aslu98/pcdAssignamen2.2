@@ -29,11 +29,15 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-ext', version: '14', ext: 'pom'
     implementation files('JPF/jpf-core/build/jpf.jar')
 
+    /* module 2.2 - async programming with event-loops - vert.x */
     compile 'io.vertx:vertx-core:4.0.3'
     compile 'io.vertx:vertx-web:4.0.3'
     compile 'io.vertx:vertx-web-client:4.0.3'
     implementation group: 'io.netty', name: 'netty-all', version: '4.1.61.Final'
     runtimeOnly group: 'io.netty', name: 'netty-resolver-dns-native-macos', version: '4.1.61.Final'
+
+    /* module 2.3 - reactive programming - RxJava */
+    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

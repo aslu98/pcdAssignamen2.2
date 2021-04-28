@@ -35,7 +35,6 @@ public class TrainSolutionsAPIAgent extends BasicAPIAgent<SolutionsWrapper> {
         log("Service initializing...");
         this.session = WebClientSession.create(WebClient.create(vertx));
         this.getDepartureName();
-
     }
 
     private void getDepartureName(){
