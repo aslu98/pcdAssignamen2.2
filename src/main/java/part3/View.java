@@ -1,13 +1,6 @@
 package part3;
+import java.util.Map;
 
-import part1.InputListener;
-
-/**
- * Class representing the view part of the application.
- * 
- * @author aricci
- *
- */
 public class View {
 
 	private ViewFrame frame;
@@ -26,13 +19,12 @@ public class View {
         });
     }
 	
-	public void update(Object[] freqs) {
+	public void update(Map<String, Integer> freqs) {
 		frame.update(freqs);
 	}
-	
+
 	public void done() {
 		frame.done();
 	}
-
 }
 	

@@ -35,7 +35,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 	public ViewFrame(){
 		super(".:: Words Freq ::.");
-		setSize(600,400);
+		setSize(1000,400);
 		listeners = new ArrayList<InputListener>();
 		
 		startButton = new JButton("start");
@@ -44,19 +44,20 @@ public class ViewFrame extends JFrame implements ActionListener {
 		chooseFile = new JButton("select file");
 
 		selectedDir = new JLabel(DefaultInputs.AbsolutePath + DefaultInputs.DirectoryPath);
-		selectedDir.setSize(200,14);
+		selectedDir.setSize(400,14);
 		selectedFile = new JLabel(DefaultInputs.AbsolutePath + DefaultInputs.IgnoreFilePath);
-		selectedFile.setSize(200,14);
+		selectedFile.setSize(400,14);
 
 		nMostFreqWords = new JTextField("10");
-		
-		JPanel controlPanel1 = new JPanel();
-		controlPanel1.add(chooseDir);
-		controlPanel1.add(selectedDir);
-		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
-		controlPanel1.add(chooseFile);
-		controlPanel1.add(selectedFile);
-		
+
+		JPanel controlPanel11 = new JPanel();
+		controlPanel11.add(chooseDir);
+		controlPanel11.add(selectedDir);
+
+		JPanel controlPanel12 = new JPanel();
+		controlPanel12.add(chooseFile);
+		controlPanel12.add(selectedFile);
+
 		JPanel controlPanel2 = new JPanel();
 		controlPanel2.add(new JLabel("Num words"));
 		controlPanel2.add(nMostFreqWords);
@@ -66,7 +67,8 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
-		controlPanel.add(controlPanel1);
+		controlPanel.add(controlPanel11);
+		controlPanel.add(controlPanel12);
 		controlPanel.add(controlPanel2);
 		
 		JPanel wordsPanel = new JPanel();

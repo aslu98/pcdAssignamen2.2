@@ -28,8 +28,8 @@ part1/jpf/jpfMain.java
  part1.jpf.jpfMain
 part1/DefaultInputs.java
  part1.DefaultInputs
-part3/View.java
- part3.View
+part1/jpf/ModelCheckingData.java
+ part1.jpf.ModelCheckingData
 part2/b/view/View.java
  part2.b.view.View
 part1/ViewFrame.java
@@ -38,8 +38,8 @@ part1/Controller.java
  part1.Controller
 part2/a/model/train/TrainState.java
  part2.a.model.train.TrainState
-part3/ViewFrame.java
- part3.ViewFrame
+part3/Main.java
+ part3.Main
 part1/jpf/File.java
  part1.jpf.File
 part1/jpf/DirMockImpl.java
@@ -100,9 +100,11 @@ part2/b/RealTimeSubject.java
  part2.b.RealTimeSubject
 part2/b/Main.java
  part2.b.Main
-part1/jpf/ModelCheckingData.java
- part1.jpf.ModelCheckingData
-part3/Main.java
- part3.Main
-part3/Flag.java
- part3.Flag
+part3/Master.java
+ part3.Master
+part3/InputListener.java
+ part3.InputListener
+part3/ViewFrame.java
+ part3.ViewFrame
+part3/View.java
+ part3.View

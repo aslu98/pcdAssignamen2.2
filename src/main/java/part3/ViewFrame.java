@@ -1,24 +1,16 @@
 package part3;
 
-import part1.DefaultInputs;
-import part1.InputListener;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
-/**
- * 
- * GUI component of the view.
- * 
- * @author aricci
- *
- */
 public class ViewFrame extends JFrame implements ActionListener {
 
+	private Input input;
 	private JButton startButton;
 	private JButton stopButton;
 	private JButton chooseDir;
@@ -38,27 +30,31 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 	public ViewFrame(){
 		super(".:: Words Freq ::.");
-		setSize(600,400);
+		setSize(1000,400);
 		listeners = new ArrayList<InputListener>();
+		input = new Input();
 		
 		startButton = new JButton("start");
 		stopButton = new JButton("stop");
 		chooseDir = new JButton("select dir");
 		chooseFile = new JButton("select file");
 
-		selectedDir = new JLabel(part1.DefaultInputs.AbsolutePath + part1.DefaultInputs.DirectoryPath);
-		selectedDir.setSize(200,14);
-		selectedFile = new JLabel(part1.DefaultInputs.AbsolutePath + DefaultInputs.IgnoreFilePath);
-		selectedFile.setSize(200,14);
+		String dirPath = input.getDir().getPath();
+		selectedDir = new JLabel(dirPath);
+		selectedDir.setSize(400,14);
+		String filePath = input.getConfigFile().getPath();
+		selectedFile = new JLabel(filePath);
+		selectedFile.setSize(400,14);
 
-		nMostFreqWords = new JTextField("10");
+		nMostFreqWords = new JTextField(input.getNumMostFreqWords() + "");
 		
-		JPanel controlPanel1 = new JPanel();
-		controlPanel1.add(chooseDir);
-		controlPanel1.add(selectedDir);
-		controlPanel1.add(Box.createRigidArea(new Dimension(20,0)));
-		controlPanel1.add(chooseFile);
-		controlPanel1.add(selectedFile);
+		JPanel controlPanel11 = new JPanel();
+		controlPanel11.add(chooseDir);
+		controlPanel11.add(selectedDir);
+
+		JPanel controlPanel12 = new JPanel();
+		controlPanel12.add(chooseFile);
+		controlPanel12.add(selectedFile);
 		
 		JPanel controlPanel2 = new JPanel();
 		controlPanel2.add(new JLabel("Num words"));
@@ -69,7 +65,8 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
-		controlPanel.add(controlPanel1);
+		controlPanel.add(controlPanel11);
+		controlPanel.add(controlPanel12);
 		controlPanel.add(controlPanel2);
 		
 		JPanel wordsPanel = new JPanel();
@@ -127,7 +124,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 			File dir = new File(selectedDir.getText());
 			File configFile = new File(selectedFile.getText());
 			int numMostFreqWords = Integer.parseInt(nMostFreqWords.getText());			
-			this.notifyStarted(dir, configFile, numMostFreqWords);
+			this.notifyStarted(new Input(dir, configFile, numMostFreqWords));
 			this.state.setText("Processing...");
 			
 			this.startButton.setEnabled(false);
@@ -147,9 +144,9 @@ public class ViewFrame extends JFrame implements ActionListener {
 
 	}
 
-	private void notifyStarted(File dir, File wordsFile, int nMostFreqWords){
+	private void notifyStarted(Input input){
 		for (InputListener l: listeners){
-			l.started(dir, wordsFile, nMostFreqWords);
+			l.started(input);
 		}
 	}
 	
@@ -159,12 +156,10 @@ public class ViewFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void update(Object[] freqs) {
+	public void update(Map<String, Integer> freqs) {
 		SwingUtilities.invokeLater(() -> {
 			wordsFreq.setText("");
-			for (int i = freqs.length - 1; i >= 0; i--) {
-				wordsFreq.append(freqs[i].toString() + "\n");
-			}
+			freqs.forEach((k,v) -> wordsFreq.append(k + " -> " + v + " times\n"));
 		});
 	}
 	
@@ -176,7 +171,6 @@ public class ViewFrame extends JFrame implements ActionListener {
 			chooseFile.setEnabled(true);
 			this.state.setText("Done.");
 		});
-
 	}
 
 }
