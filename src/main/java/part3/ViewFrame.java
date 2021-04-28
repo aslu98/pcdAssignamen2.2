@@ -108,6 +108,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 		Object src = ev.getSource();
 		if (src == chooseDir) {
 			startDirectoryChooser = new JFileChooser();
+			startDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		    int returnVal = startDirectoryChooser.showOpenDialog(this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
 		        dir = startDirectoryChooser.getSelectedFile();
