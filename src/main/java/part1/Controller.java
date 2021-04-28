@@ -3,12 +3,6 @@ package part1;
 import java.io.File;
 import java.util.concurrent.ForkJoinPool;
 
-/**
- * part1.Controller part of the application - passive part.
- * 
- * @author aricci
- *
- */
 public class Controller implements InputListener {
 
 	private Flag stopFlag;

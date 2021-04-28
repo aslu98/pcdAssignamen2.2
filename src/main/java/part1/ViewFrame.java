@@ -7,13 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * 
- * GUI component of the view.
- * 
- * @author aricci
- *
- */
 public class ViewFrame extends JFrame implements ActionListener {
 
 	private JButton startButton;

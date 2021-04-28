@@ -1,11 +1,5 @@
 package part1;
 
-/**
- * Class representing the view part of the application.
- * 
- * @author aricci
- *
- */
 public class View {
 
 	private ViewFrame frame;
