@@ -1,5 +1,6 @@
 package part3;
 
+import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -9,6 +10,8 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Master implements InputListener{
@@ -30,18 +33,21 @@ public class Master implements InputListener{
                             .map(PDDocument::load)
                             .filter(d -> d.getCurrentAccessPermission().canExtractContent())
                             .flatMap(d -> getChunkObs(d))
+                            .observeOn(Schedulers.computation())
                             .map(chunk -> Arrays.stream(chunk.split(REGEX)).collect(Collectors.toList()))
-                            .scan(new HashMap<String, Integer>(), (acc, current) -> {
-                                for (String word : current) {
+                            .flatMap(list -> Observable.fromIterable(list))
+                            .toFlowable(BackpressureStrategy.LATEST)
+                            .scan(new ConcurrentHashMap<String, Integer>(), (acc, word) ->
+                                {
                                     Integer nf = acc.get(word);
                                     if (nf == null) {
                                         acc.put(word, 1);
                                     } else {
                                         acc.put(word, nf + 1);
                                     }
-                                }
-                                return acc;
-                            })
+                                    return acc;
+                                })
+                            .sample(100, TimeUnit.MILLISECONDS)
                             .filter(m -> !m.isEmpty())
                             .map(m -> m.entrySet().stream()
                                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
