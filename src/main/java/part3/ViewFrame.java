@@ -1,11 +1,12 @@
 package part3;
 
+import io.reactivex.rxjava3.subjects.PublishSubject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class ViewFrame extends JFrame implements ActionListener {
@@ -26,12 +27,12 @@ public class ViewFrame extends JFrame implements ActionListener {
 	private File dir;
 	private File wordsToDiscardFile;
 	
-	private ArrayList<InputListener> listeners;
+	private PublishSubject<Input> inputStream;
 
-	public ViewFrame(){
+	public ViewFrame(PublishSubject<Input> inputStream){
 		super(".:: Words Freq ::.");
 		setSize(1000,400);
-		listeners = new ArrayList<InputListener>();
+		this.inputStream = inputStream;
 		input = new Input();
 		
 		startButton = new JButton("start");
@@ -99,10 +100,6 @@ public class ViewFrame extends JFrame implements ActionListener {
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-
-	public void addListener(InputListener l){
-		listeners.add(l);
-	}
 	
 	public void actionPerformed(ActionEvent ev){
 		Object src = ev.getSource();
@@ -146,15 +143,11 @@ public class ViewFrame extends JFrame implements ActionListener {
 	}
 
 	private void notifyStarted(Input input){
-		for (InputListener l: listeners){
-			l.started(input);
-		}
+		inputStream.onNext(input);
 	}
 	
 	private void notifyStopped(){
-		for (InputListener l: listeners){
-			l.stopped();
-		}
+
 	}
 	
 	public void update(Map<String, Integer> freqs) {

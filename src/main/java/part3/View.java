@@ -1,16 +1,14 @@
 package part3;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+
 import java.util.Map;
 
 public class View {
 
 	private ViewFrame frame;
 
-	public View(){
-		frame = new ViewFrame();
-	}
-	
-	public void addListener(InputListener l){
-		frame.addListener(l);
+	public View(PublishSubject<Input> inputStream){
+		frame = new ViewFrame(inputStream);
 	}
 
 	public void display() {
