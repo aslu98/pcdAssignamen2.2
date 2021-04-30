@@ -1,7 +1,7 @@
-part2/b/RealTimeSubject.java
- part2.b.RealTimeSubject
-part2/b/Main.java
- part2.b.Main
+part1/ViewerTask.java
+ part1.ViewerTask
+part1/Main.java
+ part1.Main
 part1/Flag.java
  part1.Flag
 part2/b/InputListener.java
@@ -28,18 +28,18 @@ part1/jpf/jpfMain.java
  part1.jpf.jpfMain
 part1/DefaultInputs.java
  part1.DefaultInputs
-part1/jpf/ModelCheckingData.java
- part1.jpf.ModelCheckingData
+part3/View.java
+ part3.View
 part2/b/view/View.java
  part2.b.view.View
-part2/a/model/solution/SolutionsWrapper.java
- part2.a.model.solution.SolutionsWrapper
-part1/jpf/DocDiscovererTask.java
- part1.jpf.DocDiscovererTask
+part1/ViewFrame.java
+ part1.ViewFrame
+part1/Controller.java
+ part1.Controller
 part2/a/model/train/TrainState.java
  part2.a.model.train.TrainState
-part2/a/agency/RealTimeAPIAgent.java
- part2.a.agency.RealTimeAPIAgent
+part3/ViewFrame.java
+ part3.ViewFrame
 part1/jpf/File.java
  part1.jpf.File
 part1/jpf/DirMockImpl.java
@@ -50,8 +50,8 @@ part2/a/agency/TrainSolutionsAPIAgent.java
  part2.a.agency.TrainSolutionsAPIAgent
 part2/b/Controller.java
  part2.b.Controller
-part1/jpf/DocLoaderTask.java
- part1.jpf.DocLoaderTask
+part1/MasterTask.java
+ part1.MasterTask
 part2/a/model/station/StationState.java
  part2.a.model.station.StationState
 part1/DocLoaderTask.java
@@ -62,8 +62,10 @@ part1/InputListener.java
  part1.InputListener
 part1/TextAnalyzerTask.java
  part1.TextAnalyzerTask
-part1/jpf/TextAnalyzerTask.java
- part1.jpf.TextAnalyzerTask
+part1/jpf/ModelCheckingData.java
+ part1.jpf.ModelCheckingData
+part3/InputListener.java
+ part3.InputListener
 part2/a/APIMain.java
  part2.a.APIMain
 part2/a/model/station/TrainInStation.java
@@ -86,24 +88,22 @@ part2/a/model/train/Stop.java
  part2.a.model.train.Stop
 part1/jpf/WordFreqMap.java
  part1.jpf.WordFreqMap
-part1/ViewerTask.java
- part1.ViewerTask
 part1/View.java
  part1.View
-part1/MasterTask.java
- part1.MasterTask
-part1/Main.java
- part1.Main
-part3/View.java
- part3.View
-part3/ViewFrame.java
- part3.ViewFrame
-part1/ViewFrame.java
- part1.ViewFrame
-part1/Controller.java
- part1.Controller
-part3/InputListener.java
- part3.InputListener
+part1/jpf/TextAnalyzerTask.java
+ part1.jpf.TextAnalyzerTask
+part1/jpf/DocDiscovererTask.java
+ part1.jpf.DocDiscovererTask
+part1/jpf/DocLoaderTask.java
+ part1.jpf.DocLoaderTask
+part2/a/agency/RealTimeAPIAgent.java
+ part2.a.agency.RealTimeAPIAgent
+part2/a/model/solution/SolutionsWrapper.java
+ part2.a.model.solution.SolutionsWrapper
+part2/b/RealTimeSubject.java
+ part2.b.RealTimeSubject
+part2/b/Main.java
+ part2.b.Main
 part3/Master.java
  part3.Master
 part3/Main.java

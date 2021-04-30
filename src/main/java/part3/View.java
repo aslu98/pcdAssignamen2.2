@@ -22,9 +22,5 @@ public class View {
 	public void update(Map<String, Integer> freqs) {
 		frame.update(freqs);
 	}
-
-	public void done() {
-		frame.done();
-	}
 }
 	

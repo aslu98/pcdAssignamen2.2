@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -32,19 +33,15 @@ public class Master implements InputListener{
                             .observeOn(Schedulers.io())
                             .map(PDDocument::load)
                             .filter(d -> d.getCurrentAccessPermission().canExtractContent())
-                            .flatMap(d -> getChunkObs(d))
+                            .flatMap(this::getStrippers)
+                            .map(pair -> pair.getKey().getText(pair.getValue()))
                             .observeOn(Schedulers.computation())
                             .map(chunk -> Arrays.stream(chunk.split(REGEX)).collect(Collectors.toList()))
-                            .flatMap(list -> Observable.fromIterable(list))
+                            .flatMap(Observable::fromIterable)
                             .toFlowable(BackpressureStrategy.LATEST)
                             .scan(new ConcurrentHashMap<String, Integer>(), (acc, word) ->
                                 {
-                                    Integer nf = acc.get(word);
-                                    if (nf == null) {
-                                        acc.put(word, 1);
-                                    } else {
-                                        acc.put(word, nf + 1);
-                                    }
+                                    acc.merge(word, 1, Integer::sum);
                                     return acc;
                                 })
                             .sample(100, TimeUnit.MILLISECONDS)
@@ -72,18 +69,16 @@ public class Master implements InputListener{
                 .filter(f -> f.getName().endsWith(".pdf"));
     }
 
-    private Observable<String> getChunkObs(PDDocument doc) throws IOException {
+    private Observable<Pair<PDFTextStripper, PDDocument>> getStrippers(PDDocument doc) throws IOException {
         PDFTextStripper stripper = new PDFTextStripper();
-        List<String> chunks = new LinkedList<>();
+        List<Pair<PDFTextStripper, PDDocument>> strippers = new LinkedList<>();
         int nPages = doc.getNumberOfPages();
         for (int i = 0; i < nPages; i++) {
             stripper.setStartPage(i);
             stripper.setEndPage(i);
-            String chunk = stripper.getText(doc);
-            chunks.add(chunk);
+            strippers.add(Pair.of(stripper, doc));
         }
-        doc.close();
-        return Observable.fromIterable(chunks);
+        return Observable.fromIterable(strippers);
     }
 
     private static void log(String msg) {

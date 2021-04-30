@@ -127,20 +127,18 @@ public class ViewFrame extends JFrame implements ActionListener {
 			int numMostFreqWords = Integer.parseInt(nMostFreqWords.getText());			
 			this.notifyStarted(new Input(dir, configFile, numMostFreqWords));
 			this.state.setText("Processing...");
-			
-			this.startButton.setEnabled(false);
-			this.stopButton.setEnabled(true);
+
 			chooseDir.setEnabled(false);
 			chooseFile.setEnabled(false);
+			this.stopButton.setEnabled(true);
 			
 		} else if (src == stopButton) {
 			this.notifyStopped();
 			this.state.setText("Stopped.");
 
-			this.startButton.setEnabled(true);
-			this.stopButton.setEnabled(false);
 			chooseDir.setEnabled(true);
 			chooseFile.setEnabled(true);
+			this.stopButton.setEnabled(false);
 		}
 
 	}
@@ -161,16 +159,6 @@ public class ViewFrame extends JFrame implements ActionListener {
 		SwingUtilities.invokeLater(() -> {
 			wordsFreq.setText("");
 			freqs.forEach((k,v) -> wordsFreq.append(k + " -> " + v + " times\n"));
-		});
-	}
-	
-	public void done() {
-		SwingUtilities.invokeLater(() -> {
-			this.startButton.setEnabled(true);
-			this.stopButton.setEnabled(false);
-			chooseDir.setEnabled(true);
-			chooseFile.setEnabled(true);
-			this.state.setText("Done.");
 		});
 	}
 
