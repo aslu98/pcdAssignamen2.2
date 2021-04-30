@@ -23,7 +23,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 	private final ArrayList<InputListener> listeners;
 
 	public ViewFrame(){
-		super(".:: Words Freq ::.");
+		super(".:: Words Freq - REACTIVE ::.");
 		setSize(1000,400);
 		listeners = new ArrayList<>();
 		Input input = new Input();
