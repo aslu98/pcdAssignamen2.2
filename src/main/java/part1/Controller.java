@@ -5,8 +5,8 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Controller implements InputListener {
 
-	private Flag stopFlag;
-	private View view;
+	private final Flag stopFlag;
+	private final View view;
 	private ForkJoinPool forkJoinPool;
 
 	public Controller(View view){

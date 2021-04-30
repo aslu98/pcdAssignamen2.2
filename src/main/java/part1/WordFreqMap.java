@@ -4,17 +4,15 @@ import java.util.*;
 
 public class WordFreqMap {
 
-	private HashMap<String, Integer> freqs;
-	private LinkedList<AbstractMap.SimpleEntry<String, Integer>> mostFreq;
-	private int numMostFreq;
+	private final HashMap<String, Integer> freqs;
+	private final LinkedList<AbstractMap.SimpleEntry<String, Integer>> mostFreq;
 	private int analyzedWords;
 
 	public WordFreqMap(int nMostFreq) {
-		freqs = new HashMap<String, Integer>();
-		mostFreq = new LinkedList<AbstractMap.SimpleEntry<String, Integer>>();
-		this.numMostFreq = nMostFreq;
-		for (int i = 0; i < numMostFreq; i++) {
-			mostFreq.add(new AbstractMap.SimpleEntry<String, Integer>("", 0));
+		freqs = new HashMap<>();
+		mostFreq = new LinkedList<>();
+		for (int i = 0; i < nMostFreq; i++) {
+			mostFreq.add(new AbstractMap.SimpleEntry<>("", 0));
 		}
 	}
 
@@ -45,17 +43,17 @@ public class WordFreqMap {
 		}
 
 		if (alreadyPresent) {
-			AbstractMap.SimpleEntry<String, Integer> el = new AbstractMap.SimpleEntry<String, Integer>(word, freq);
+			AbstractMap.SimpleEntry<String, Integer> el = new AbstractMap.SimpleEntry<>(word, freq);
 			mostFreq.add(index, el);
 		} else if (index > 0) {
-			AbstractMap.SimpleEntry<String, Integer> el = new AbstractMap.SimpleEntry<String, Integer>(word, freq);
+			AbstractMap.SimpleEntry<String, Integer> el = new AbstractMap.SimpleEntry<>(word, freq);
 			mostFreq.add(index, el);
 			mostFreq.removeFirst();
 		}
 	}
 
 	public synchronized Object[] getCurrentMostFreq() {
-		return (Object[]) mostFreq.toArray();
+		return mostFreq.toArray();
 	}
 
 	public synchronized int getAnalyzedWords() {

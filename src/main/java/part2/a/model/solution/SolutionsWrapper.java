@@ -18,11 +18,11 @@ public class SolutionsWrapper {
 
     @Override
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (Solution sol: solutions){
-            str +=  sol.toString() + "\n";
+            str.append(sol.toString()).append("\n");
         }
-        return str;
+        return str.toString();
     }
 
     public void updateReady(){

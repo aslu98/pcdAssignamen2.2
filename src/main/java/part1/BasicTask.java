@@ -3,7 +3,7 @@ import java.util.concurrent.RecursiveAction;
 
 public abstract class BasicTask extends RecursiveAction {
 
-	private String name;
+	private final String name;
 
 	protected BasicTask(String name) {
 		this.name = name;

@@ -2,7 +2,7 @@ package part1;
 
 public class View {
 
-	private ViewFrame frame;
+	private final ViewFrame frame;
 
 	public View(){
 		frame = new ViewFrame();
@@ -13,9 +13,7 @@ public class View {
 	}
 
 	public void display() {
-        javax.swing.SwingUtilities.invokeLater(() -> {
-        	frame.setVisible(true);
-        });
+        javax.swing.SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }
 	
 	public void update(Object[] freqs) {

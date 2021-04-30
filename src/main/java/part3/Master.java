@@ -23,7 +23,6 @@ public class Master implements InputListener{
 
     public Master(final View view){
         this.view = view;
-
     }
 
     public void started(Input input){
@@ -34,7 +33,9 @@ public class Master implements InputListener{
                             .map(PDDocument::load)
                             .filter(d -> d.getCurrentAccessPermission().canExtractContent())
                             .flatMap(this::getStrippers)
-                            .map(pair -> pair.getKey().getText(pair.getValue()))
+                            .map(pair -> Pair.of(pair.getLeft().getText(pair.getRight().getLeft()), pair.getRight()))
+                            .doOnNext(pair -> { if (pair.getRight().getRight()) { pair.getRight().getLeft().close();}})
+                            .map(Pair::getKey)
                             .observeOn(Schedulers.computation())
                             .map(chunk -> Arrays.stream(chunk.split(REGEX)).collect(Collectors.toList()))
                             .flatMap(Observable::fromIterable)
@@ -69,20 +70,17 @@ public class Master implements InputListener{
                 .filter(f -> f.getName().endsWith(".pdf"));
     }
 
-    private Observable<Pair<PDFTextStripper, PDDocument>> getStrippers(PDDocument doc) throws IOException {
+    private Observable<Pair<PDFTextStripper, Pair<PDDocument, Boolean>>> getStrippers(PDDocument doc) throws IOException {
         PDFTextStripper stripper = new PDFTextStripper();
-        List<Pair<PDFTextStripper, PDDocument>> strippers = new LinkedList<>();
+        List<Pair<PDFTextStripper, Pair<PDDocument, Boolean>>> strippers = new LinkedList<>();
+        boolean lastStripper;
         int nPages = doc.getNumberOfPages();
         for (int i = 0; i < nPages; i++) {
             stripper.setStartPage(i);
             stripper.setEndPage(i);
-            strippers.add(Pair.of(stripper, doc));
+            lastStripper = i == nPages - 1;
+            strippers.add(Pair.of(stripper, Pair.of(doc, lastStripper)));
         }
         return Observable.fromIterable(strippers);
     }
-
-    private static void log(String msg) {
-        System.out.println("[ " + Thread.currentThread().getName() + " ] " + msg);
-    }
-
 }

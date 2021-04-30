@@ -2,23 +2,19 @@ package part2.b;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 import part2.a.TrainAPI;
-import part2.a.agency.RealTimeTrainAPIAgent;
 import part2.a.model.solution.SolutionsWrapper;
-import part2.a.model.train.TrainState;
 import part2.b.view.View;
 
 public class Controller implements InputListener {
 
 	private static final int MAX_CONSECUTIVE_ERRORS = 20;
-	private Flag stopFlag;
-	private View view;
+	private final Flag stopFlag;
+	private final View view;
 	private long startTime;
-	private Future<?> fut;
 	private int errors;
 	private boolean lastWasError;
-	private TrainAPI api;
+	private final TrainAPI api;
 	
 	public Controller(View view){
 		this.stopFlag = new Flag();
@@ -32,14 +28,10 @@ public class Controller implements InputListener {
 	public void findSolutions(String from, String to, String date, String time) {
 		startTime = System.currentTimeMillis();
 		Future<SolutionsWrapper> fut = api.getTrainSolutions(from, to, date, time);
-		fut.onSuccess((SolutionsWrapper res) -> {
-			view.updateSolutions(res.toString());
-		}).onFailure((Throwable t) -> {
+		fut.onSuccess((SolutionsWrapper res) -> view.updateSolutions(res.toString())).onFailure((Throwable t) -> {
 			log("failure: " + t.getMessage());
 			view.blockingErrorOccurred(t.getMessage());
-		}).onComplete((AsyncResult<SolutionsWrapper> res) -> {
-			log("findsolutions completed in " + (System.currentTimeMillis() - startTime) + " millis.");
-		});
+		}).onComplete((AsyncResult<SolutionsWrapper> res) -> log("findsolutions completed in " + (System.currentTimeMillis() - startTime) + " millis."));
 	}
 
 	@Override
@@ -56,6 +48,7 @@ public class Controller implements InputListener {
 	private void getNewInfo(String code, RealTimeSubject subject){
 		startTime = System.currentTimeMillis();
 		if (!stopFlag.isSet()) {
+			Future<?> fut;
 			if (subject == RealTimeSubject.STATION){
 				fut = api.getRealTimeStationInfo(code);
 			} else {

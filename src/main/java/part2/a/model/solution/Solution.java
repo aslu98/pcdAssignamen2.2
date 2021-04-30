@@ -101,17 +101,14 @@ public class Solution {
     @Override
     public String toString() {
         if (this.detailsReady()){
-            String str = "";
+            StringBuilder str = new StringBuilder();
             for (String id: trainid) {
-                str+= id + (trainid.indexOf(id) == trainid.size()-1 ? "" : "  +  ");
+                str.append(id).append(trainid.indexOf(id) == trainid.size() - 1 ? "" : "  +  ");
             }
-            str += "\n   " + origin + " -> " + destination + "   (direction " + direction + ")"
-                + "\n   departure: " + TimeUtils.getStringTime(departureTime) + "   arrival: " +TimeUtils.getStringTime(arrivalTime) + "   (duration " + duration + ")"
-                + "\n   minprice: " + minprice + "      changes: " + changesno + "      can be acquired: " + (saleable ? "yes" : "no")
-                + "\n   stops: ";
+            str.append("\n   ").append(origin).append(" -> ").append(destination).append("   (direction ").append(direction).append(")").append("\n   departure: ").append(TimeUtils.getStringTime(departureTime)).append("   arrival: ").append(TimeUtils.getStringTime(arrivalTime)).append("   (duration ").append(duration).append(")").append("\n   minprice: ").append(minprice).append("      changes: ").append(changesno).append("      can be acquired: ").append(saleable ? "yes" : "no").append("\n   stops: ");
             for (int i = 0; i < stopStations.get().size(); i++){
                 String stop = stopStations.get().get(i);
-                str += stop + ((i+1) % 5 == 0 && i != stopStations.get().size()-1 ? "\n              " : "      ");
+                str.append(stop).append((i + 1) % 5 == 0 && i != stopStations.get().size() - 1 ? "\n              " : "      ");
             }
             return str + "\n";
         }

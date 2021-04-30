@@ -11,24 +11,24 @@ import java.util.ArrayList;
 
 public class ViewFrame extends JFrame implements ActionListener {
 
-	private JButton findButton;
-	private JButton trainMonitorButton;
-	private JButton stationMonitorButton;
-	private JButton stopMonitoringButton;
-	private JTextField fromField;
-	private JTextField toField;
-	private JTextField dateField;
-	private JTextField timeField;
-	private JTextField codeField;
-	private JTextField state;
-	private JTextArea textArea;
+	private final JButton findButton;
+	private final JButton trainMonitorButton;
+	private final JButton stationMonitorButton;
+	private final JButton stopMonitoringButton;
+	private final JTextField fromField;
+	private final JTextField toField;
+	private final JTextField dateField;
+	private final JTextField timeField;
+	private final JTextField codeField;
+	private final JTextField state;
+	private final JTextArea textArea;
 	
-	private ArrayList<InputListener> listeners;
+	private final ArrayList<InputListener> listeners;
 
 	public ViewFrame(){
 		super(".:: Trains ::.");
 		setSize(800,800);
-		listeners = new ArrayList<InputListener>();
+		listeners = new ArrayList<>();
 		
 		findButton = new JButton("find");
 		trainMonitorButton = new JButton("monitor train");
@@ -193,15 +193,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 	}
 
 	public void updateMonitoring(String state) {
-		SwingUtilities.invokeLater(() -> {
-			textArea.setText(state.trim());
-		});
-	}
-
-	public void stopMonitoring(){
-		SwingUtilities.invokeLater(() -> {
-			textArea.setText("");
-		});
+		SwingUtilities.invokeLater(() -> textArea.setText(state.trim()));
 	}
 
 }

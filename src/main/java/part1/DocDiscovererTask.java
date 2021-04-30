@@ -4,16 +4,17 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.RecursiveAction;
 
 public class DocDiscovererTask extends BasicTask {
 
-	private File startDir;
-	private List<RecursiveAction> forks;
+	private final File startDir;
+	private final List<RecursiveAction> forks;
 	private int nDocsFound;
-	private Flag stopFlag;
-	private WordFreqMap map;
-	private HashMap<String,String> wordsToDiscard;
+	private final Flag stopFlag;
+	private final WordFreqMap map;
+	private final HashMap<String,String> wordsToDiscard;
 	
 	public DocDiscovererTask(File dir, Flag stopFlag, HashMap<String,String> wordsToDiscard, WordFreqMap map) {
 		super("doc-discoverer");
@@ -44,7 +45,7 @@ public class DocDiscovererTask extends BasicTask {
 	
 	private void explore(File dir) {
 		if (!stopFlag.isSet()) {
-			for (File f: dir.listFiles()) {
+			for (File f: Objects.requireNonNull(dir.listFiles())) {
 				if (f.isDirectory()) {
 					DocDiscovererTask task = new DocDiscovererTask(f, stopFlag, wordsToDiscard, map);
 					forks.add(task);

@@ -13,12 +13,12 @@ import java.util.concurrent.RecursiveAction;
 
 public class DocLoaderTask extends BasicTask{
 
-	private PDFTextStripper stripper;
-	private Flag stopFlag;
-	private WordFreqMap map;
-	private HashMap<String,String> wordsToDiscard;
-	private List<RecursiveAction> forks;
-	private File doc;
+	private final PDFTextStripper stripper;
+	private final Flag stopFlag;
+	private final WordFreqMap map;
+	private final HashMap<String,String> wordsToDiscard;
+	private final List<RecursiveAction> forks;
+	private final File doc;
 	
 	public DocLoaderTask(String id, Flag stopFlag, File f, HashMap<String,String> wordsToDiscard, WordFreqMap map) throws Exception  {
 		super("doc-loader-" + id);
@@ -37,7 +37,7 @@ public class DocLoaderTask extends BasicTask{
 			log("got a doc to load: " + doc.getName());
 			try {
 				loadDoc(doc);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			}
 		} else {
 			log("stopped");

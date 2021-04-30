@@ -2,12 +2,6 @@ package part2.a.model.train;
 
 import part2.a.model.TimeUtils;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 public class TimeInfo {
     private final long arriveScheduled;
     private final long departureScheduled;

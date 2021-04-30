@@ -4,7 +4,7 @@ import part2.b.InputListener;
 
 public class View {
 
-	private ViewFrame frame;
+	private final ViewFrame frame;
 
 	public View(){
 		frame = new ViewFrame();
@@ -15,9 +15,7 @@ public class View {
 	}
 
 	public void display() {
-        javax.swing.SwingUtilities.invokeLater(() -> {
-        	frame.setVisible(true);
-        });
+        javax.swing.SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }
 
     public void blockingErrorOccurred(String err){
@@ -30,10 +28,6 @@ public class View {
 	
 	public void updateMonitoring(String state) {
 		frame.updateMonitoring(state);
-	}
-
-	public void stopMonitoring() {
-		frame.stopMonitoring();
 	}
 
 }

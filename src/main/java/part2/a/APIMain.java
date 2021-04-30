@@ -37,13 +37,7 @@ public class APIMain {
 
 		Future<StationState> fut = new TrainAPI().getRealTimeStationInfo("S05043");
 
-		fut.onSuccess((StationState res) -> {
-			log("success: " + res.toString());
-		}).onFailure((Throwable t) -> {
-			log("failure: " + t.getMessage());
-		}).onComplete((AsyncResult<StationState> res) -> {
-			log("reacting to completion - " + res.succeeded());
-		});
+		fut.onSuccess((StationState res) -> log("success: " + res.toString())).onFailure((Throwable t) -> log("failure: " + t.getMessage())).onComplete((AsyncResult<StationState> res) -> log("reacting to completion - " + res.succeeded()));
 
 		log("dopofut");
 	}

@@ -2,9 +2,9 @@ package part1;
 
 public class ViewerTask extends BasicTask{
 
-	private WordFreqMap map;
-	private View view;
-	private Flag done;
+	private final WordFreqMap map;
+	private final View view;
+	private final Flag done;
 	
 	protected ViewerTask(WordFreqMap map, View view, Flag done) {
 		super("viewer");

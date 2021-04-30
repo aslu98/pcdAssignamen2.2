@@ -40,10 +40,10 @@ public class TrainState {
 
     @Override
     public String toString() {
-        String str =  "train " + trainId + ", last stop: " + lastStop.getStation() + " (" + lastStop.getStationCode() + ")"
-                + ", actual delay: " + actualDelay + " min.\n     stops:";
+        StringBuilder str = new StringBuilder("train " + trainId + ", last stop: " + lastStop.getStation() + " (" + lastStop.getStationCode() + ")"
+                + ", actual delay: " + actualDelay + " min.\n     stops:");
         for (Stop stop: stops){
-            str += stop.toString();
+            str.append(stop.toString());
         }
         return str + "\n";
     }

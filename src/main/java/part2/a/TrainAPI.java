@@ -6,7 +6,6 @@ import io.vertx.core.Vertx;
 import part2.a.agency.RealTimeStationAPIAgent;
 import part2.a.agency.RealTimeTrainAPIAgent;
 import part2.a.agency.TrainSolutionsAPIAgent;
-import part2.a.model.solution.Solution;
 import part2.a.model.solution.SolutionsWrapper;
 import part2.a.model.station.StationState;
 import part2.a.model.train.TrainState;

@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 public class TextAnalyzerTask extends BasicTask {
 
-	private HashMap<String,String> wordsToDiscard;
-	private WordFreqMap map;
-	private Flag stopFlag;
-	private String chunk;
+	private final HashMap<String,String> wordsToDiscard;
+	private final WordFreqMap map;
+	private final Flag stopFlag;
+	private final String chunk;
 
 	public TextAnalyzerTask(String id, Flag stopFlag, String chunk, HashMap<String,String> wordsToDiscard, WordFreqMap map)  {
 		super("text-analyzer-" + id);

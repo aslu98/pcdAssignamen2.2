@@ -21,9 +21,9 @@ public class StationState {
 
     @Override
     public String toString() {
-        String str = "\nstation " + stationCode;
+        StringBuilder str = new StringBuilder("\nstation " + stationCode);
         for (TrainInStation t: trains) {
-            str += "\n   " + t.toString();
+            str.append("\n   ").append(t.toString());
         }
         return str + "\n";
     }

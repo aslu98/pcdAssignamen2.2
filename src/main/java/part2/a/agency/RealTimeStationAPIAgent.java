@@ -1,7 +1,6 @@
 package part2.a.agency;
 
 import io.vertx.core.Promise;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientSession;
@@ -13,10 +12,8 @@ import part2.a.model.station.TrainInStation;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Optional;
 
 public class RealTimeStationAPIAgent extends RealTimeAPIAgent<StationState> {
 

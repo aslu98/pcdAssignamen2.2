@@ -10,29 +10,23 @@ import java.util.Map;
 
 public class ViewFrame extends JFrame implements ActionListener {
 
-	private Input input;
-	private JButton startButton;
-	private JButton stopButton;
-	private JButton chooseDir;
-	private JButton chooseFile;
-	private JTextField nMostFreqWords;
-	private JTextField state;
-	private JLabel selectedDir;
-	private JLabel selectedFile;
-	private JTextArea wordsFreq;
-	private JFileChooser startDirectoryChooser;
-	private JFileChooser wordsToDiscardFileChooser;
-	
-	private File dir;
-	private File wordsToDiscardFile;
-	
-	private ArrayList<InputListener> listeners;
+	private final JButton startButton;
+	private final JButton stopButton;
+	private final JButton chooseDir;
+	private final JButton chooseFile;
+	private final JTextField nMostFreqWords;
+	private final JTextField state;
+	private final JLabel selectedDir;
+	private final JLabel selectedFile;
+	private final JTextArea wordsFreq;
+
+	private final ArrayList<InputListener> listeners;
 
 	public ViewFrame(){
 		super(".:: Words Freq ::.");
 		setSize(1000,400);
-		listeners = new ArrayList<InputListener>();
-		input = new Input();
+		listeners = new ArrayList<>();
+		Input input = new Input();
 		
 		startButton = new JButton("start");
 		stopButton = new JButton("stop");
@@ -107,18 +101,18 @@ public class ViewFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent ev){
 		Object src = ev.getSource();
 		if (src == chooseDir) {
-			startDirectoryChooser = new JFileChooser();
+			JFileChooser startDirectoryChooser = new JFileChooser();
 			startDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		    int returnVal = startDirectoryChooser.showOpenDialog(this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		        dir = startDirectoryChooser.getSelectedFile();
+				File dir = startDirectoryChooser.getSelectedFile();
 		        selectedDir.setText(dir.getAbsolutePath());
 		     }
 		} else if (src == chooseFile) {
-			wordsToDiscardFileChooser = new JFileChooser();
+			JFileChooser wordsToDiscardFileChooser = new JFileChooser();
 		    int returnVal = wordsToDiscardFileChooser.showOpenDialog(this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		    	wordsToDiscardFile = wordsToDiscardFileChooser.getSelectedFile();
+				File wordsToDiscardFile = wordsToDiscardFileChooser.getSelectedFile();
 		        selectedFile.setText(wordsToDiscardFile.getAbsolutePath());
 		     }		    
 		} else if (src == startButton) {
