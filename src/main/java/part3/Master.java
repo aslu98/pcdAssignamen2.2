@@ -27,12 +27,13 @@ public class Master implements InputListener{
     }
 
     public void started(Input input){
-        Flowable<Map<String,Integer>> flowable = Observable.just(input)
+        Observable<Map<String,Integer>> flowable = Observable.just(input)
             .observeOn(Schedulers.single())
             .filter(in -> in.getDir().isDirectory())
             .flatMap(in -> Observable.fromArray(in.getDir().listFiles()))
             .flatMap(this::exploreDir)
             .filter(f -> f.getName().endsWith(".pdf"))
+
             .observeOn(Schedulers.io())
             .map(PDDocument::load)
             .filter(d -> d.getCurrentAccessPermission().canExtractContent())
@@ -44,7 +45,6 @@ public class Master implements InputListener{
             .observeOn(Schedulers.computation())
             .map(chunk -> Arrays.stream(chunk.split(REGEX)).collect(Collectors.toList()))
             .flatMap(Observable::fromIterable)
-            .toFlowable(BackpressureStrategy.DROP)
             .filter(word -> !input.getWordsToDiscard().contains(word))
             .scan(new ConcurrentHashMap<String, Integer>(), (acc, word) ->
                 {
@@ -59,7 +59,8 @@ public class Master implements InputListener{
                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .limit(input.getNumMostFreqWords())
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)));
-       this.subscription = flowable.subscribe(view::update);
+
+        this.subscription = flowable.subscribe(view::update);
     }
 
     public void stopped(){
