@@ -1,4 +1,6 @@
 package part3;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Map;
 
 public class View {
@@ -17,8 +19,8 @@ public class View {
         javax.swing.SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }
 	
-	public void update(Map<String, Integer> freqs) {
-		frame.update(freqs);
+	public void update(Pair<Map<String, Integer>, Pair<Integer, Integer>> info) {
+		frame.update(info);
 	}
 }
 	

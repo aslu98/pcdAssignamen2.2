@@ -1,5 +1,7 @@
 package part3;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +23,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 	private final JTextArea wordsFreq;
 
 	private final ArrayList<InputListener> listeners;
+	private Long startTime;
 
 	public ViewFrame(){
 		super(".:: Words Freq - REACTIVE ::.");
@@ -125,7 +128,7 @@ public class ViewFrame extends JFrame implements ActionListener {
 			chooseDir.setEnabled(false);
 			chooseFile.setEnabled(false);
 			this.stopButton.setEnabled(true);
-			
+			this.startButton.setEnabled(false);
 		} else if (src == stopButton) {
 			this.notifyStopped();
 			this.state.setText("Stopped.");
@@ -133,11 +136,13 @@ public class ViewFrame extends JFrame implements ActionListener {
 			chooseDir.setEnabled(true);
 			chooseFile.setEnabled(true);
 			this.stopButton.setEnabled(false);
+			this.startButton.setEnabled(true);
 		}
 
 	}
 
 	private void notifyStarted(Input input){
+		startTime = System.currentTimeMillis();
 		for (InputListener l: listeners){
 			l.started(input);
 		}
@@ -149,9 +154,13 @@ public class ViewFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void update(Map<String, Integer> freqs) {
+	public void update(Pair <Map<String, Integer>, Pair<Integer, Integer>> info) {
 		SwingUtilities.invokeLater(() -> {
-			wordsFreq.setText("");
+			Long now =  System.currentTimeMillis();
+			wordsFreq.setText("Info: " + (now - startTime) + " millis elapsed - "
+							+ info.getValue().getKey() + " docs - "
+							+ info.getValue().getValue() + " words\n");
+			Map<String, Integer> freqs = info.getKey();
 			freqs.forEach((k,v) -> wordsFreq.append(k + " -> " + v + " times\n"));
 		});
 	}

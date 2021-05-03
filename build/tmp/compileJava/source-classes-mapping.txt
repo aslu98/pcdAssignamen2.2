@@ -98,12 +98,12 @@ part1/jpf/DocLoaderTask.java
  part1.jpf.DocLoaderTask
 part1/View.java
  part1.View
+part1/ViewFrame.java
+ part1.ViewFrame
 part3/Master.java
  part3.Master
 part3/ViewFrame.java
  part3.ViewFrame
-part1/ViewFrame.java
- part1.ViewFrame
 part3/Main.java
  part3.Main
 part3/View.java

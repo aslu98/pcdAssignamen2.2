@@ -1,7 +1,5 @@
 package part3;
 
-import io.reactivex.rxjava3.core.BackpressureStrategy;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -21,46 +19,56 @@ public class Master implements InputListener{
     private final static String REGEX = "[\\x{201D}\\x{201C}\\s'\", ?.@;:!-]+";
     private final View view;
     private Disposable subscription;
+    private int words;
+    private int docs;
 
     public Master(final View view){
         this.view = view;
     }
 
     public void started(Input input){
-        Observable<Map<String,Integer>> flowable = Observable.just(input)
-            .observeOn(Schedulers.single())
-            .filter(in -> in.getDir().isDirectory())
-            .flatMap(in -> Observable.fromArray(in.getDir().listFiles()))
-            .flatMap(this::exploreDir)
-            .filter(f -> f.getName().endsWith(".pdf"))
+        words = 0;
+        docs =  0;
 
-            .observeOn(Schedulers.io())
-            .map(PDDocument::load)
-            .filter(d -> d.getCurrentAccessPermission().canExtractContent())
-            .flatMap(this::getStrippers)
-            .map(pair -> Pair.of(pair.getLeft().getText(pair.getRight().getLeft()), pair.getRight()))
-            .doOnNext(pair -> { if (pair.getRight().getRight()) { pair.getRight().getLeft().close();}})
-            .map(Pair::getKey)
+        Observable<Pair<Map<String, Integer>, Pair<Integer, Integer>>> obs = Observable.just(input)
+                .observeOn(Schedulers.single())
+                .filter(in -> in.getDir().isDirectory())
+                .flatMap(in -> Observable.fromArray(in.getDir().listFiles()))
+                .flatMap(this::exploreDir)
+                .filter(f -> f.getName().endsWith(".pdf"))
 
-            .observeOn(Schedulers.computation())
-            .map(chunk -> Arrays.stream(chunk.split(REGEX)).collect(Collectors.toList()))
-            .flatMap(Observable::fromIterable)
-            .filter(word -> !input.getWordsToDiscard().contains(word))
-            .scan(new ConcurrentHashMap<String, Integer>(), (acc, word) ->
-                {
-                    acc.merge(word, 1, Integer::sum);
-                    return acc;
-                })
+                .observeOn(Schedulers.io())
+                .map(PDDocument::load)
+                .doOnNext(w -> docs += 1)
+                .filter(d -> d.getCurrentAccessPermission().canExtractContent())
+                .flatMap(this::getStrippers)
+                .map(pair -> Pair.of(pair.getLeft().getText(pair.getRight().getLeft()), pair.getRight()))
+                .doOnNext(pair -> { if (pair.getRight().getRight()) { pair.getRight().getLeft().close();}})
+                .map(Pair::getKey)
 
-            .buffer(100, TimeUnit.MILLISECONDS)
-            .filter(l -> !l.isEmpty())
-            .map(list -> list.get(list.size() - 1))
-            .map(m -> m.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                    .limit(input.getNumMostFreqWords())
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)));
+                .observeOn(Schedulers.computation())
+                .map(chunk -> Arrays.stream(chunk.split(REGEX)).collect(Collectors.toList()))
+                .flatMap(Observable::fromIterable)
+                .filter(word -> !input.getWordsToDiscard().contains(word))
+                .doOnNext(w -> words += 1)
+                .scan(new ConcurrentHashMap<String, Integer>(), (acc, word) ->
+                    {
+                        acc.merge(word, 1, Integer::sum);
+                        return acc;
+                    })
 
-        this.subscription = flowable.subscribe(view::update);
+                .buffer(100, TimeUnit.MILLISECONDS)
+                .filter(l -> !l.isEmpty())
+                .map(list -> list.get(list.size() - 1))
+                .map(m -> m.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .limit(input.getNumMostFreqWords())
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)))
+                .map(m -> Pair.of(m, Pair.of(docs, words)));
+
+        this.subscription = obs.subscribe(view::update);
+
+
     }
 
     public void stopped(){
